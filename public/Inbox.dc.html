@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#eef1f5;font-family:'Geist',ui-sans-serif,system-ui,sans-serif;color:#0f172a;-webkit-font-smoothing:antialiased}
+  .tnum{font-variant-numeric:tabular-nums}
+  .mono{font-family:'Geist Mono',ui-monospace,monospace}
+  .cap{text-transform:uppercase;letter-spacing:.09em}
+  a{color:#2563eb;text-decoration:none}a:hover{text-decoration:underline}
+</style>
+</helmet>
+<div style="display:flex;min-height:100vh;width:1440px">
+
+  <nav style="width:74px;flex:none;background:#1a212e;display:flex;flex-direction:column;align-items:center;padding:15px 0;gap:3px">
+    <div style="width:38px;height:38px;border-radius:11px;background:linear-gradient(160deg,#3b82f6,#2563eb);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;margin-bottom:14px">م</div>
+    <a href="Kehadiran — Dir B.dc.html" style="width:46px;display:flex;flex-direction:column;align-items:center;gap:3px;color:#7c8798;padding:9px 0;border-radius:12px;text-decoration:none"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18M8.5 15l2 2 3.5-3.5"/></svg><span style="font-size:9px" class="cap">Hadir</span></a>
+    <a href="Peserta.dc.html" style="width:46px;display:flex;flex-direction:column;align-items:center;gap:3px;color:#7c8798;padding:9px 0;border-radius:12px;text-decoration:none"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><span style="font-size:9px" class="cap">Pesrt</span></a>
+    <a href="Pengajar.dc.html" style="width:46px;display:flex;flex-direction:column;align-items:center;gap:3px;color:#7c8798;padding:9px 0;border-radius:12px;text-decoration:none"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span style="font-size:9px" class="cap">Guru</span></a>
+    <a href="Silabus.dc.html" style="width:46px;display:flex;flex-direction:column;align-items:center;gap:3px;color:#7c8798;padding:9px 0;border-radius:12px;text-decoration:none"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span style="font-size:9px" class="cap">Silbs</span></a>
+    <a href="Inbox.dc.html" style="width:46px;display:flex;flex-direction:column;align-items:center;gap:3px;color:#bfdbfe;background:rgba(96,165,250,.15);border-radius:12px;padding:9px 0;position:relative;text-decoration:none"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg><span style="font-size:9px;font-weight:600" class="cap">Aksi</span><span style="position:absolute;top:5px;right:7px;min-width:14px;height:14px;padding:0 3px;border-radius:7px;background:#ef4444;color:#fff;font-size:8.5px;font-weight:700;display:flex;align-items:center;justify-content:center">7</span></a>
+    <a href="Laporan.dc.html" style="width:46px;display:flex;flex-direction:column;align-items:center;gap:3px;color:#7c8798;padding:9px 0;border-radius:12px;text-decoration:none"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6"/><rect x="12" y="7" width="3" height="10"/><rect x="17" y="13" width="3" height="4"/></svg><span style="font-size:9px" class="cap">Lprn</span></a>
+    <a href="#" style="width:46px;display:flex;flex-direction:column;align-items:center;gap:3px;color:#7c8798;padding:9px 0;border-radius:12px;text-decoration:none"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg><span style="font-size:9px" class="cap">Surat</span></a>
+    <a href="Scorecard.dc.html" style="width:46px;display:flex;flex-direction:column;align-items:center;gap:3px;color:#7c8798;padding:9px 0;border-radius:12px;text-decoration:none"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg><span style="font-size:9px" class="cap">Skor</span></a>
+    <div style="margin-top:auto;width:34px;height:34px;border-radius:10px;background:#28303f;color:#9aa5b6;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:11px">SA</div>
+  </nav>
+
+  <div style="flex:1;display:flex;flex-direction:column;min-width:0">
+    <header style="height:56px;flex:none;background:#fff;border-bottom:1px solid #dde3ea;display:flex;align-items:center;gap:0;padding:0 24px">
+      <span class="cap" style="font-size:10px;color:#94a3b8;font-weight:600">Program</span>
+      <div style="display:flex;align-items:center;gap:8px;margin-left:10px;padding-right:18px;border-right:1px solid #e2e8f0;height:100%">
+        <span style="font-weight:600;font-size:14px">HITS Reguler</span>
+        <span class="mono" style="font-size:10.5px;color:#475569;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:2px 6px">B12</span>
+      </div>
+      <span style="display:flex;align-items:center;font-size:13px;font-weight:600;color:#0f172a;padding:0 15px;margin-left:8px">Pusat Aksi</span>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:16px">
+        <div class="mono" style="display:flex;align-items:center;gap:7px;font-size:11px;color:#475569"><span style="width:6px;height:6px;border-radius:50%;background:#22c55e"></span>SYNC 06:12 ago</div>
+        <button style="display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;color:#fff;background:#0f172a;border:none;border-radius:7px;padding:7px 12px;cursor:pointer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>Sync</button>
+        <span style="font-size:12.5px;color:#64748b">coordinator@tilawalabs.demo</span>
+      </div>
+    </header>
+
+    <main style="flex:1;display:flex;min-height:0;overflow:hidden">
+      <!-- left filter column -->
+      <aside style="width:236px;flex:none;background:#fff;border-right:1px solid #dde3ea;padding:20px 16px;overflow:auto">
+        <div class="cap" style="font-size:10px;color:#94a3b8;font-weight:600;margin-bottom:12px">Antrian</div>
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 11px;border-radius:8px;background:#eff4ff;color:#1e40af;font-size:13px;font-weight:600">Perlu tindakan <span class="mono tnum" style="font-size:11px">7</span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 11px;border-radius:8px;color:#475569;font-size:13px">Ditugaskan ke saya <span class="mono tnum" style="font-size:11px;color:#94a3b8">3</span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 11px;border-radius:8px;color:#475569;font-size:13px">Menunggu sync <span class="mono tnum" style="font-size:11px;color:#94a3b8">2</span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 11px;border-radius:8px;color:#475569;font-size:13px">Selesai <span class="mono tnum" style="font-size:11px;color:#94a3b8">41</span></div>
+        </div>
+        <div class="cap" style="font-size:10px;color:#94a3b8;font-weight:600;margin:20px 0 12px">Kategori</div>
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <div style="display:flex;align-items:center;gap:9px;padding:7px 11px;border-radius:8px;color:#475569;font-size:13px"><span style="width:8px;height:8px;border-radius:2px;background:#dc2626"></span>Kehadiran kritis <span class="mono tnum" style="margin-left:auto;font-size:11px;color:#94a3b8">3</span></div>
+          <div style="display:flex;align-items:center;gap:9px;padding:7px 11px;border-radius:8px;color:#475569;font-size:13px"><span style="width:8px;height:8px;border-radius:2px;background:#d97706"></span>Belum presensi <span class="mono tnum" style="margin-left:auto;font-size:11px;color:#94a3b8">2</span></div>
+          <div style="display:flex;align-items:center;gap:9px;padding:7px 11px;border-radius:8px;color:#475569;font-size:13px"><span style="width:8px;height:8px;border-radius:2px;background:#7c3aed"></span>Keterlambatan <span class="mono tnum" style="margin-left:auto;font-size:11px;color:#94a3b8">1</span></div>
+          <div style="display:flex;align-items:center;gap:9px;padding:7px 11px;border-radius:8px;color:#475569;font-size:13px"><span style="width:8px;height:8px;border-radius:2px;background:#2563eb"></span>Data & sync <span class="mono tnum" style="margin-left:auto;font-size:11px;color:#94a3b8">1</span></div>
+        </div>
+      </aside>
+
+      <!-- action list -->
+      <section style="flex:1;min-width:0;overflow:auto;padding:22px 24px 40px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <div style="display:flex;align-items:baseline;gap:12px"><h1 style="margin:0;font-size:19px;font-weight:700;letter-spacing:-.01em">Perlu tindakan</h1><span class="mono cap" style="font-size:10.5px;color:#94a3b8">7 item · diperbarui 06:12</span></div>
+          <div style="display:flex;gap:8px">
+            <div style="display:inline-flex;background:#e6ebf1;border-radius:7px;padding:2px"><span style="font-size:11.5px;font-weight:600;background:#fff;color:#0f172a;border-radius:5px;padding:4px 11px;box-shadow:0 1px 2px rgba(0,0,0,.06)">Prioritas</span><span style="font-size:11.5px;color:#64748b;padding:4px 11px">Terbaru</span></div>
+          </div>
+        </div>
+        <p style="margin:0 0 18px;font-size:12.5px;color:#64748b">Item dihasilkan otomatis dari ambang kehadiran, presensi tertunggak, dan form piket.</p>
+
+        <div style="display:flex;flex-direction:column;gap:10px">
+
+          <div style="background:#fff;border:1px solid #dde3ea;border-left:3px solid #dc2626;border-radius:10px;padding:15px 18px;display:flex;gap:14px;align-items:flex-start">
+            <div style="flex:none;width:36px;height:36px;border-radius:9px;background:#fef2f2;color:#dc2626;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg></div>
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;align-items:center;gap:8px"><span class="mono cap" style="font-size:9.5px;color:#b91c1c;background:#fee2e2;border-radius:4px;padding:2px 7px">Kritis</span><span class="mono cap" style="font-size:9.5px;color:#94a3b8">Kehadiran</span></div>
+              <div style="font-size:14.5px;font-weight:600;margin-top:7px">As-Sakinah 2 turun ke 58.9% — 3 pekan berturut di bawah 70%</div>
+              <div style="font-size:12.5px;color:#64748b;margin-top:4px">Usth. Maryam Hafizah · Marhalah 2 Akhwat · 4 peserta alfa &gt; 2×. Direkomendasikan tinjau &amp; terbitkan surat HKM.</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-top:12px">
+                <button style="font-size:12px;font-weight:500;color:#fff;background:#2563eb;border:none;border-radius:7px;padding:6px 12px;cursor:pointer">Tinjau halaqah</button>
+                <button style="font-size:12px;font-weight:500;color:#334155;background:#fff;border:1px solid #d5dce4;border-radius:7px;padding:6px 12px;cursor:pointer">Terbitkan surat</button>
+                <span style="margin-left:auto;font-size:11.5px;color:#94a3b8">Jatuh tempo hari ini</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #dde3ea;border-left:3px solid #dc2626;border-radius:10px;padding:15px 18px;display:flex;gap:14px;align-items:flex-start">
+            <div style="flex:none;width:36px;height:36px;border-radius:9px;background:#fef2f2;color:#dc2626;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg></div>
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;align-items:center;gap:8px"><span class="mono cap" style="font-size:9.5px;color:#b91c1c;background:#fee2e2;border-radius:4px;padding:2px 7px">Kritis</span><span class="mono cap" style="font-size:9.5px;color:#94a3b8">Kehadiran</span></div>
+              <div style="font-size:14.5px;font-weight:600;margin-top:7px">An-Nur 4 di 63.5% — pola alfa terkonsentrasi di 3 peserta</div>
+              <div style="font-size:12.5px;color:#64748b;margin-top:4px">Usth. Khadijah Amin · Marhalah 3 Akhwat · perlu konfirmasi izin/alfa sebelum rekap bulanan.</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-top:12px">
+                <button style="font-size:12px;font-weight:500;color:#fff;background:#2563eb;border:none;border-radius:7px;padding:6px 12px;cursor:pointer">Tinjau halaqah</button>
+                <button style="font-size:12px;font-weight:500;color:#334155;background:#fff;border:1px solid #d5dce4;border-radius:7px;padding:6px 12px;cursor:pointer">Tugaskan</button>
+                <span style="margin-left:auto;font-size:11.5px;color:#94a3b8">Jatuh tempo 2 hari</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #dde3ea;border-left:3px solid #d97706;border-radius:10px;padding:15px 18px;display:flex;gap:14px;align-items:flex-start">
+            <div style="flex:none;width:36px;height:36px;border-radius:9px;background:#fffbeb;color:#d97706;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;align-items:center;gap:8px"><span class="mono cap" style="font-size:9.5px;color:#b45309;background:#fef3c7;border-radius:4px;padding:2px 7px">Perhatian</span><span class="mono cap" style="font-size:9.5px;color:#94a3b8">Presensi</span></div>
+              <div style="font-size:14.5px;font-weight:600;margin-top:7px">2 halaqah belum menginput presensi pertemuan ke-7 &amp; 8</div>
+              <div style="font-size:12.5px;color:#64748b;margin-top:4px">Al-Hikmah 2 (Ust. Fauzan) · As-Sakinah 2 (Usth. Maryam). Batas input tutup 20:00 malam ini.</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-top:12px">
+                <button style="font-size:12px;font-weight:500;color:#fff;background:#2563eb;border:none;border-radius:7px;padding:6px 12px;cursor:pointer">Ingatkan pengajar</button>
+                <button style="font-size:12px;font-weight:500;color:#334155;background:#fff;border:1px solid #d5dce4;border-radius:7px;padding:6px 12px;cursor:pointer">Buka presensi</button>
+                <span style="margin-left:auto;font-size:11.5px;color:#94a3b8">Batas 20:00</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #dde3ea;border-left:3px solid #7c3aed;border-radius:10px;padding:15px 18px;display:flex;gap:14px;align-items:flex-start">
+            <div style="flex:none;width:36px;height:36px;border-radius:9px;background:#f5f3ff;color:#7c3aed;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;align-items:center;gap:8px"><span class="mono cap" style="font-size:9.5px;color:#6d28d9;background:#ede9fe;border-radius:4px;padding:2px 7px">Piket</span><span class="mono cap" style="font-size:9.5px;color:#94a3b8">Keterlambatan</span></div>
+              <div style="font-size:14.5px;font-weight:600;margin-top:7px">Ahmad Fauzi (Al-Hikmah 2) tercatat telat 3× bulan ini</div>
+              <div style="font-size:12.5px;color:#64748b;margin-top:4px">Ambang surat teguran tercapai. Data dari form piket 14 Agu, 07:24.</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-top:12px">
+                <button style="font-size:12px;font-weight:500;color:#fff;background:#2563eb;border:none;border-radius:7px;padding:6px 12px;cursor:pointer">Terbitkan teguran</button>
+                <button style="font-size:12px;font-weight:500;color:#334155;background:#fff;border:1px solid #d5dce4;border-radius:7px;padding:6px 12px;cursor:pointer">Lihat riwayat</button>
+                <span style="margin-left:auto;font-size:11.5px;color:#94a3b8">Kemarin</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #dde3ea;border-left:3px solid #2563eb;border-radius:10px;padding:15px 18px;display:flex;gap:14px;align-items:flex-start">
+            <div style="flex:none;width:36px;height:36px;border-radius:9px;background:#eff6ff;color:#2563eb;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></div>
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;align-items:center;gap:8px"><span class="mono cap" style="font-size:9.5px;color:#1d4ed8;background:#dbeafe;border-radius:4px;padding:2px 7px">Sync</span><span class="mono cap" style="font-size:9.5px;color:#94a3b8">Data</span></div>
+              <div style="font-size:14.5px;font-weight:600;margin-top:7px">3 peserta baru di sumber belum dipetakan ke halaqah</div>
+              <div style="font-size:12.5px;color:#64748b;margin-top:4px">Ditemukan saat sync 06:12 dari cms.tilawalabs.demo.</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-top:12px">
+                <button style="font-size:12px;font-weight:500;color:#fff;background:#2563eb;border:none;border-radius:7px;padding:6px 12px;cursor:pointer">Petakan sekarang</button>
+                <span style="margin-left:auto;font-size:11.5px;color:#94a3b8">06:12 hari ini</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

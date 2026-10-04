@@ -1,0 +1,324 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens — Tilawa Labs #Pendidikan palette (design "Overhaul Warna
+ * Logo" 1a): forest #2E413D for chrome and the main action, gold #CCBB76 /
+ * bronze #A38D45 for active markers and accents, warm paper canvas instead of
+ * blue-grey. Status colours are tuned to earth tones (see the palette
+ * overrides in `@theme` below).
+ * Dark mode stays OS-preference (prefers-color-scheme) to match the existing
+ * inline `dark:` utilities — we deliberately do NOT register a class-based
+ * `dark` variant, so tokens are redefined under the media query below.
+ */
+:root {
+  color-scheme: light;
+  --radius: 0.625rem;
+
+  /*
+   * App canvas + chrome. `--surface-app` is the muted page background the data
+   * cards sit on (cards keep `--card` = white). The `--rail-*` set styles the
+   * dark icon-rail; the rail is fixed-dark chrome in BOTH light and dark mode
+   * (matches the redesign mockups), so these are not redefined under the dark
+   * media query below.
+   */
+  --surface-app: #f6f4ee;
+  --rail: #2e413d;
+  --rail-fg: #a9b8b2;
+  --rail-fg-active: #ccbb76;
+  --rail-active-bg: rgba(204, 187, 118, 0.14);
+  --rail-border: #3b524d;
+
+  /* Brand constants — same in both themes. */
+  --brand-forest: #2e413d;
+  --brand-ink: #1f2d29;
+  --brand-gold: #ccbb76;
+  --brand-bronze: #a38d45;
+  --brand-gold-tint: #f3edd8;
+
+  --background: #ffffff;
+  --foreground: #1f2d29; /* ink */
+  --card: #ffffff;
+  --card-foreground: #1f2d29;
+  --popover: #ffffff;
+  --popover-foreground: #1f2d29;
+  --primary: #2e413d; /* forest */
+  --primary-foreground: #ffffff;
+  --secondary: #f3f0e7;
+  --secondary-foreground: #1f2d29;
+  --muted: #f3f0e7;
+  --muted-foreground: #5f6a65;
+  --accent: #f3edd8; /* gold tint */
+  --accent-foreground: #1f2d29;
+  --destructive: #a63f2d;
+  --destructive-foreground: #ffffff;
+  --border: #e1dbcb;
+  --input: #e1dbcb;
+  --ring: #a38d45; /* bronze */
+
+  /*
+   * `--border` is a hairline DIVIDER (1.3:1 on white) — fine between table rows,
+   * far too pale to be the outline of a control. Interactive boundaries (input,
+   * select, textarea, outline button, segmented track, sticky-header rule) use
+   * `--border-strong`, which clears WCAG 1.4.11 (3:1) on every surface we paint
+   * on: 3.50:1 on `--card`, 3.19:1 on `--surface-app`, 3.21:1 on neutral-100.
+   */
+  /* #9C9582 in the design; nudged to #8f8876 so it keeps 3:1 on the paper canvas. */
+  --border-strong: #8f8876;
+
+  /*
+   * Text roles (see components/ui/README.md).
+   *
+   * `text-neutral-400` was the de-facto muted color across the app; it is
+   * 2.6:1 on white, i.e. it fails WCAG AA in LIGHT mode. These two roles are
+   * redefined per theme so both stay above 4.5:1 on `--card` AND on
+   * `--surface-app` — and, since the light audit, on the neutral-50/100 table
+   * chrome too (`--ink-faint` was oklch(0.556), which read 4.32:1 on the app
+   * canvas and 4.34:1 on a neutral-100 table head — both under AA):
+   *   --ink-muted  secondary text (hints, sub-labels, table meta)  5.4–5.9:1
+   *   --ink-faint  tertiary micro-labels, still readable           4.6–5.1:1
+   * Anything quieter than `--ink-faint` is not allowed to carry meaning.
+   *
+   * Status text colors are single tokens so dark mode stops mixing red-600
+   * (too dark on the card) with red-400. Use them for TEXT and BORDERS; the
+   * filled pill backgrounds still come from lib/ui/status.ts.
+   */
+  --ink-muted: #5f6a65; /* 5.2:1 on the canvas */
+  --ink-faint: #666a5f; /* 5.0:1 on the canvas, 4.7:1 on neutral-100 */
+  --danger: #8e3324;
+  --warn: #7e500a;
+  --ok: #2f6546;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    /* In dark mode the canvas is a touch darker than the cards. */
+    --surface-app: #141816;
+    --background: #181d1b;
+    --foreground: #f1efe8;
+    --card: #1f2624;
+    --card-foreground: #f1efe8;
+    --popover: #1f2624;
+    --popover-foreground: #f1efe8;
+    --primary: #ccbb76; /* gold carries the action on dark */
+    --primary-foreground: #1f2d29;
+    --secondary: #2a322f;
+    --secondary-foreground: #f1efe8;
+    --muted: #2a322f;
+    --muted-foreground: #b3b8b0;
+    --accent: #2f3a33;
+    --accent-foreground: #f1efe8;
+    --destructive: #c96c57;
+    --destructive-foreground: #ffffff;
+    --border: rgb(241 239 232 / 10%);
+    --input: rgb(241 239 232 / 15%);
+    --ring: #ccbb76;
+
+    /*
+     * Control outlines were `neutral-700` in dark — 1.7:1 on `--card`, i.e. the
+     * same failure as light mode, just less obvious. 3.69:1 on `--card`,
+     * 4.08:1 on `--background`, 3.11:1 on the `neutral-800` input fill.
+     */
+    --border-strong: #7d8580;
+
+    /* Same roles, flipped: lighter than the card instead of darker. */
+    --ink-muted: #c3c7bf;
+    --ink-faint: #a9aea5;
+    --danger: #dc9886;
+    --warn: #e3bc6c;
+    --ok: #9cc4a8;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-faint: var(--ink-faint);
+  --color-danger: var(--danger);
+  --color-warn: var(--warn);
+  --color-ok: var(--ok);
+
+  --color-surface-app: var(--surface-app);
+  --color-rail: var(--rail);
+  --color-rail-fg: var(--rail-fg);
+  --color-rail-fg-active: var(--rail-fg-active);
+  --color-rail-active: var(--rail-active-bg);
+  --color-rail-border: var(--rail-border);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-brand-forest: var(--brand-forest);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-gold: var(--brand-gold);
+  --color-brand-bronze: var(--brand-bronze);
+  --color-brand-gold-tint: var(--brand-gold-tint);
+
+  --font-sans: var(--font-jakarta);
+  --font-mono: var(--font-geist-mono);
+}
+
+/*
+ * Type scale — the only sizes the data-console is allowed to use.
+ * Registered in Tailwind's font-size namespace, so `text-11`, `sm:text-14`,
+ * etc. all work and the built-in `text-xs`/`text-sm`/… keep working too.
+ *
+ *   text-11  micro-labels, table meta, chips   (pair with `cap`)
+ *   text-12  dense table body, secondary lines
+ *   text-14  default body / table body         (= text-sm)
+ *   text-16  card titles, emphasised body      (= text-base)
+ *   text-20  section headings, small KPI value
+ *   text-28  hero KPI number
+ *
+ * Do not add new `text-[Npx]` arbitrary values; extend this scale instead.
+ * Existing arbitrary sizes still compile — migrate to the nearest step:
+ *   [8.5px]/[9px]/[9.5px]/[10px]/[10.5px]/[11px] → text-11
+ *   [12.5px]/[13px] → text-12   [15px] → text-14
+ *   [19px] → text-20            [27px] → text-28
+ */
+@theme {
+  --text-11: 0.6875rem;
+  --text-11--line-height: 1rem;
+  --text-12: 0.75rem;
+  --text-12--line-height: 1.125rem;
+  --text-14: 0.875rem;
+  --text-14--line-height: 1.25rem;
+  --text-16: 1rem;
+  --text-16--line-height: 1.5rem;
+  --text-20: 1.25rem;
+  --text-20--line-height: 1.625rem;
+  --text-28: 1.75rem;
+  --text-28--line-height: 2.125rem;
+}
+
+/*
+ * Earth-tone palette overrides. Tailwind's stock neutral/blue/emerald/green/
+ * amber/red are cool and saturated; ~40 pages use them directly
+ * (`text-neutral-500`, `bg-emerald-100`, `bg-red-600` …). Re-pointing the
+ * palettes here moves every one of those call sites onto the logo's warm
+ * paper + forest/gold world without touching the pages:
+ *   neutral → warm grey (paper → ink)   blue → slate #35556B ("Izin"/info)
+ *   emerald/green → moss #2F6546 ("Aman")   amber/yellow → ochre #7E500A
+ *   red → brick #8E3324 ("Kritis")
+ * Step 100 is the badge fill and 700 the badge text of the design's status
+ * chips, so `toneBadgeClass` lands on the exact design pairs.
+ */
+@theme {
+  --color-neutral-50: #faf8f3;
+  --color-neutral-100: #f3f0e7;
+  --color-neutral-200: #e6e0d1;
+  --color-neutral-300: #d3ccba;
+  --color-neutral-400: #a19a88;
+  --color-neutral-500: #797363;
+  --color-neutral-600: #5c5749;
+  --color-neutral-700: #45413a;
+  --color-neutral-800: #2c2f2b;
+  --color-neutral-900: #1f2422;
+  --color-neutral-950: #141816;
+
+  --color-blue-50: #f0f5f8;
+  --color-blue-100: #e0e9ef;
+  --color-blue-200: #c3d4df;
+  --color-blue-300: #9db7c8;
+  --color-blue-400: #7195ad;
+  --color-blue-500: #537a94;
+  --color-blue-600: #3d6078;
+  --color-blue-700: #35556b;
+  --color-blue-800: #2b4557;
+  --color-blue-900: #233847;
+  --color-blue-950: #14212b;
+
+  --color-emerald-50: #f1f7f2;
+  --color-emerald-100: #e2eee5;
+  --color-emerald-200: #c4ddcb;
+  --color-emerald-300: #9cc4a8;
+  --color-emerald-400: #6fa583;
+  --color-emerald-500: #4e8c66;
+  --color-emerald-600: #3d7a57;
+  --color-emerald-700: #2f6546;
+  --color-emerald-800: #264f38;
+  --color-emerald-900: #1e3d2c;
+  --color-emerald-950: #10241a;
+
+  --color-green-50: #f1f7f2;
+  --color-green-100: #e2eee5;
+  --color-green-200: #c4ddcb;
+  --color-green-300: #9cc4a8;
+  --color-green-400: #6fa583;
+  --color-green-500: #4e8c66;
+  --color-green-600: #3d7a57;
+  --color-green-700: #2f6546;
+  --color-green-800: #264f38;
+  --color-green-900: #1e3d2c;
+  --color-green-950: #10241a;
+
+  --color-amber-50: #fcf6e8;
+  --color-amber-100: #f7ebcf;
+  --color-amber-200: #efd6a0;
+  --color-amber-300: #e3bc6c;
+  --color-amber-400: #d29e3f;
+  --color-amber-500: #b67e1f;
+  --color-amber-600: #94600e;
+  --color-amber-700: #7e500a;
+  --color-amber-800: #653f0b;
+  --color-amber-900: #52340d;
+  --color-amber-950: #2e1b04;
+
+  --color-yellow-50: #fcf6e8;
+  --color-yellow-100: #f7ebcf;
+  --color-yellow-200: #efd6a0;
+  --color-yellow-300: #e3bc6c;
+  --color-yellow-400: #d29e3f;
+  --color-yellow-500: #b67e1f;
+  --color-yellow-600: #94600e;
+  --color-yellow-700: #7e500a;
+  --color-yellow-800: #653f0b;
+  --color-yellow-900: #52340d;
+  --color-yellow-950: #2e1b04;
+
+  --color-red-50: #fbf1ee;
+  --color-red-100: #f5dfd9;
+  --color-red-200: #ebc0b5;
+  --color-red-300: #dc9886;
+  --color-red-400: #c96c57;
+  --color-red-500: #b5503b;
+  --color-red-600: #a63f2d;
+  --color-red-700: #8e3324;
+  --color-red-800: #72291d;
+  --color-red-900: #5c2319;
+  --color-red-950: #33110b;
+}
+
+body {
+  background: var(--surface-app);
+  color: var(--foreground);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Uppercase micro-label used across the data-console (KPI labels, table heads). */
+@utility cap {
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}

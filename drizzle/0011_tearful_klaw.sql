@@ -1,0 +1,1 @@
+ALTER TABLE "teacher_meeting_confirmations" ADD COLUMN "confirmed_by" text;

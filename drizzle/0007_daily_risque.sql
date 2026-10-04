@@ -1,0 +1,1 @@
+ALTER TABLE "students_sync" ADD COLUMN "enrollment_status_code" integer;

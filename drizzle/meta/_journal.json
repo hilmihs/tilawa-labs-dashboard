@@ -1,0 +1,363 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1784014543573,
+      "tag": "0000_lazy_crystal",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1784016460788,
+      "tag": "0001_high_triton",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1784072642278,
+      "tag": "0002_broad_skaar",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1784076421063,
+      "tag": "0003_old_ted_forrester",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1784083683453,
+      "tag": "0004_slimy_tony_stark",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1784088809422,
+      "tag": "0005_serious_jackal",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1784089473220,
+      "tag": "0006_low_black_crow",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1784103220368,
+      "tag": "0007_daily_risque",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1784131732770,
+      "tag": "0008_little_vargas",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1784132122991,
+      "tag": "0009_gifted_talisman",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1784260481181,
+      "tag": "0010_organic_sway",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1784295363534,
+      "tag": "0011_tearful_klaw",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1784546088082,
+      "tag": "0012_cynical_paladin",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1784857592161,
+      "tag": "0013_mature_monster_badoon",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1785425598234,
+      "tag": "0014_bent_ser_duncan",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1786157827512,
+      "tag": "0015_gifted_triathlon",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1786166177889,
+      "tag": "0016_tan_baron_strucker",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1786248398162,
+      "tag": "0017_bent_stellaris",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1786335948325,
+      "tag": "0018_worried_thanos",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1786338215676,
+      "tag": "0019_fearless_squirrel_girl",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1786366837068,
+      "tag": "0020_tiny_puma",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1786466980245,
+      "tag": "0021_complete_winter_soldier",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1786644141358,
+      "tag": "0022_open_the_twelve",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1786835158921,
+      "tag": "0023_careful_wrecker",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1786884394715,
+      "tag": "0024_sour_random",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1786888479007,
+      "tag": "0025_gorgeous_blacklash",
+      "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1786890819461,
+      "tag": "0026_gigantic_dust",
+      "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1786945404694,
+      "tag": "0027_fuzzy_magdalene",
+      "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1787049926734,
+      "tag": "0028_certain_darkstar",
+      "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
+      "when": 1787413225018,
+      "tag": "0029_narrow_gladiator",
+      "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1788409453639,
+      "tag": "0030_stale_ronan",
+      "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1788422515343,
+      "tag": "0031_lucky_shiver_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1788475877450,
+      "tag": "0032_powerful_the_captain",
+      "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1788488200384,
+      "tag": "0033_maahir_rekap_bridge",
+      "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "7",
+      "when": 1788513864864,
+      "tag": "0034_maahir_ingest",
+      "breakpoints": true
+    },
+    {
+      "idx": 35,
+      "version": "7",
+      "when": 1788851044287,
+      "tag": "0035_mabni_wali_pengajar",
+      "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "7",
+      "when": 1789011481702,
+      "tag": "0036_acara",
+      "breakpoints": true
+    },
+    {
+      "idx": 37,
+      "version": "7",
+      "when": 1789138323599,
+      "tag": "0037_hadir",
+      "breakpoints": true
+    },
+    {
+      "idx": 38,
+      "version": "7",
+      "when": 1789616531970,
+      "tag": "0038_ringkasan_kajian",
+      "breakpoints": true
+    },
+    {
+      "idx": 39,
+      "version": "7",
+      "when": 1789632079997,
+      "tag": "0039_program_tasks",
+      "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "7",
+      "when": 1789634394087,
+      "tag": "0040_orang_tautan",
+      "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "7",
+      "when": 1789972538408,
+      "tag": "0041_worried_micromacro",
+      "breakpoints": true
+    },
+    {
+      "idx": 42,
+      "version": "7",
+      "when": 1790046098020,
+      "tag": "0042_tough_nova",
+      "breakpoints": true
+    },
+    {
+      "idx": 43,
+      "version": "7",
+      "when": 1790073743888,
+      "tag": "0043_wide_living_tribunal",
+      "breakpoints": true
+    },
+    {
+      "idx": 44,
+      "version": "7",
+      "when": 1790174514253,
+      "tag": "0044_quiet_puma",
+      "breakpoints": true
+    },
+    {
+      "idx": 45,
+      "version": "7",
+      "when": 1790329420987,
+      "tag": "0045_kantor_izin",
+      "breakpoints": true
+    },
+    {
+      "idx": 46,
+      "version": "7",
+      "when": 1790635797119,
+      "tag": "0046_penilaian_kaderisasi",
+      "breakpoints": true
+    },
+    {
+      "idx": 47,
+      "version": "7",
+      "when": 1790651261722,
+      "tag": "0047_riwayat_mandiri",
+      "breakpoints": true
+    },
+    {
+      "idx": 48,
+      "version": "7",
+      "when": 1790667169562,
+      "tag": "0048_kantor_ikhbar",
+      "breakpoints": true
+    },
+    {
+      "idx": 49,
+      "version": "7",
+      "when": 1790695886398,
+      "tag": "0049_kehadiran_pengurus",
+      "breakpoints": true
+    },
+    {
+      "idx": 50,
+      "version": "7",
+      "when": 1790701600995,
+      "tag": "0050_antre_kirim_kehadiran",
+      "breakpoints": true
+    }
+  ]
+}

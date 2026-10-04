@@ -1,0 +1,1 @@
+ALTER TABLE "halaqah_sync" ADD COLUMN "nama_tampil" text;

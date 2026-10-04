@@ -1,0 +1,135 @@
+# Single-VPS deploy: Postgres + app (Next standalone) + Caddy (auto-HTTPS).
+# Run from the repo root:  docker compose -f deploy/docker-compose.yml up -d --build
+# Env comes from deploy/.env (copy from deploy/.env.example).
+name: m-edu
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: mabni
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: mabni
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mabni -d mabni"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  # One-shot: apply migrations + seed the 6 programs, then exit. Uses the build
+  # stage (has drizzle-kit + tsx + source); the app runner image is prod-only.
+  # Image pushed by CI (.github/workflows/deploy.yml); `build:` kept so a local
+  # `docker compose ... up --build` still works without the registry.
+  migrate:
+    image: ${IMAGE_PREFIX:-ghcr.io/tilawa-project-dev}/dashboard-administrasi-edu:build-main
+    build:
+      context: ..
+      target: build
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+    command: sh -c "pnpm db:migrate && pnpm seed:programs"
+    restart: "no"
+
+  app:
+    image: ${IMAGE_PREFIX:-ghcr.io/tilawa-project-dev}/dashboard-administrasi-edu:runner-main
+    build:
+      context: ..
+      target: runner
+    env_file: .env
+    # This VPS has no working IPv6 route, but the upstreams (tilawah / berkah)
+    # publish AAAA records. Node's default DNS order tries IPv6 first → every
+    # outbound fetch hangs UND_ERR_CONNECT_TIMEOUT (10s) and the sync throws a
+    # 500 page. Force IPv4-first so fetches use the A record. Same fix the
+    # standalone scripts pass via NODE_OPTIONS.
+    environment:
+      NODE_OPTIONS: --dns-result-order=ipv4first
+    # --- CO-HOSTED DEPLOY ONLY (app runs on the SAME box as the upstream APIs,
+    # 103.181.142.223) --- Reroute the three sync hostnames to the host itself so
+    # outbound fetches stay on the loopback path: no internet egress, so the
+    # datacenter-IP firewall/WAF block disappears and no IP whitelist is needed.
+    # Kept as HTTPS + real hostnames on purpose — tilawah's login is a Laravel
+    # CSRF+cookie+Inertia handshake tied to the domain, so Host/SNI/cookies MUST
+    # stay `tilawah.example.org` (do NOT rewrite *_BASE_URL to localhost).
+    # `host-gateway` reaches services published on the host (443). If the APIs run
+    # in containers instead, drop these lines and join their docker network + set
+    # *_BASE_URL to the container name, OR replace host-gateway with the API
+    # container's internal IP (ask the deployer which).
+    # LEAVE COMMENTED on the standalone/external VPS — there the real public DNS
+    # is correct and these mappings would break sync.
+    # extra_hosts:
+    #   - "tilawah.example.org:host-gateway"
+    #   - "mabni.example.org:host-gateway"
+    #   - "cms.example.com:host-gateway"
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    volumes:
+      - storage:/app/storage # generated surat-peringatan PDFs (STORAGE_BACKEND=local)
+    restart: unless-stopped
+    # Also join the shared ingress network so the external Caddy (fronting other
+    # apps) can resolve this container as `m-edu-app-1` — durable across reboots,
+    # unlike a manual `docker network connect`. Set `ingress.name` to the actual
+    # external network (here: the n8n stack's network).
+    networks:
+      - default
+      - ingress
+
+  # NOTE: no caddy service here. Ingress/TLS is handled by an EXTERNAL Caddy
+  # (this VPS already runs one fronting other apps on ports 80/443). To expose
+  # the app, add a site block to that Caddy's Caddyfile and connect it to this
+  # compose network so it can resolve the app container by name:
+  #     dashboard.example.org {
+  #         reverse_proxy m-edu-app-1:3000
+  #     }
+  #   docker network connect m-edu_default <caddy-container>
+  #   docker exec <caddy-container> caddy reload --config /etc/caddy/Caddyfile
+  # If this is the ONLY app on the VPS, use deploy/Caddyfile + re-add a caddy
+  # service binding 80/443 instead.
+
+  # Near-live sync: hit the cron route every 15 min (guarded against overlap).
+  #
+  # Each call prints its timestamp, route, HTTP status and the head of the body
+  # to this container's log. The loop still never exits on a failure — that part
+  # was always right — but it no longer throws the evidence away. The previous
+  # version ended every call with `>/dev/null 2>&1 || true`, which discarded the
+  # body AND the exit status, and is why the 13-15 Aug outage ran for two days
+  # with `docker compose logs cron` showing nothing at all.
+  #
+  # The routes themselves decide whether there is work to do (class hours, and
+  # whether any program has a meeting today), so firing every 15 minutes is
+  # cheap even when nothing needs syncing. `sync-maahir` is the strongest case
+  # of that: its upstream recommends a DAILY pull, so the route no-ops unless
+  # the last successful run is >6 h old. The cadence lives in the route, next to
+  # the reason for it, and this list stays a plain list of route names.
+  #
+  # Quiet window: no calls during 05:00–07:00 WIB (Asia/Jakarta, UTC+7), i.e.
+  # UTC hours 22 and 23 — the container clock is UTC. The window is checked per
+  # iteration; with a 15-min loop the boundary can drift up to one cycle.
+  cron:
+    image: curlimages/curl:latest
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      - app
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - 'while true; do h=$$(date -u +%H); if [ "$$h" = "22" ] || [ "$$h" = "23" ]; then echo "[$$(date -u +%Y-%m-%dT%H:%M:%SZ)] paused (05-07 WIB quiet window)"; else for r in sync-tilawah sync-hkm sync-mabni sync-maahir refresh-scorecard; do : > /tmp/out; : > /tmp/err; code=$$(curl -sS -m 900 -o /tmp/out -w "%{http_code}" -H "Authorization: Bearer $$CRON_SECRET" "http://app:3000/api/cron/$$r" 2>/tmp/err); [ -n "$$code" ] || code=000; echo "[$$(date -u +%Y-%m-%dT%H:%M:%SZ)] $$r $$code $$(head -c 300 /tmp/out)$$(head -c 200 /tmp/err)"; done; fi; sleep 900; done'
+
+networks:
+  default: {}
+  # The pre-existing reverse-proxy network to attach the app to (external =
+  # created outside this compose). On this VPS it's the n8n stack's network.
+  ingress:
+    external: true
+    name: n8n_default
+
+volumes:
+  dbdata: {}
+  storage: {}

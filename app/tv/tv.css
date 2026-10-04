@@ -1,0 +1,347 @@
+/*
+ * Layar Majelis — blue data-console board, read from four to six metres away.
+ *
+ * The invariant that governs every size below:
+ *
+ *   --s = min(1.05vw, 1.87vh)
+ *
+ * means the board is ALWAYS exactly 95.24s × 53.48s (16:9) on any screen,
+ * centred and letterboxed. Geometry is then identical on 720p, 1080p and 4K.
+ * Every region is a fixed slot with overflow hidden, so no list can push a
+ * sibling off the sheet.
+ *
+ * Palette: near-black blue ink, blue-600 accent, emerald = attendance recorded,
+ * amber = gap / stale, red = critical.
+ */
+
+.tv {
+  --s: min(1.05vw, 1.87vh);
+
+  --ink-0: #0b1018;
+  --ink-1: #111a28;
+  --rule-1: #1e2b40;
+  --rule-2: #24406a;
+
+  --text-1: #e6ecf5;
+  --text-2: #9aa8c0;
+  --text-3: #7c8798;
+
+  --accent: #3b82f6;
+  --hadir: #22c55e;
+  --alert: #fbbf24;
+  --danger: #f87171;
+
+  --caps: 0.12em;
+
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  display: grid;
+  place-content: center;
+  background: var(--ink-0);
+  color: var(--text-1);
+  font-family: var(--font-ui), ui-sans-serif, system-ui, sans-serif;
+  font-variant-numeric: tabular-nums lining-nums;
+  line-height: 1.2;
+  cursor: none;
+}
+
+.board {
+  width: calc(var(--s) * 95.24);
+  height: calc(var(--s) * 53.48);
+  padding: calc(var(--s) * 2.4) calc(var(--s) * 2.8);
+  background: radial-gradient(120% 90% at 82% -12%, #16233b 0%, transparent 55%), var(--ink-0);
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: calc(var(--s) * 1.9);
+}
+
+/* ── masthead ─────────────────────────────────────────────── */
+.tv-head {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--s) * 1.2);
+}
+.brandmark {
+  width: calc(var(--s) * 3.2);
+  height: calc(var(--s) * 3.2);
+  flex: none;
+  border-radius: calc(var(--s) * 0.9);
+  background: linear-gradient(160deg, #3b82f6, #2563eb);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: calc(var(--s) * 1.6);
+}
+.head-titles {
+  min-width: 0;
+}
+.head-title {
+  margin: 0;
+  font-size: calc(var(--s) * 1.55);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.head-sub {
+  margin-top: calc(var(--s) * 0.35);
+  font-size: calc(var(--s) * 0.78);
+  color: var(--text-2);
+  max-width: calc(var(--s) * 52);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.head-clock {
+  margin-left: auto;
+  text-align: right;
+}
+.clock-time {
+  font-size: calc(var(--s) * 2.3);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+.clock-date {
+  margin-top: calc(var(--s) * 0.3);
+  font-size: calc(var(--s) * 0.72);
+  color: var(--text-2);
+}
+.live {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--s) * 0.5);
+  background: var(--ink-1);
+  border: 1px solid var(--rule-1);
+  border-radius: calc(var(--s) * 0.65);
+  padding: calc(var(--s) * 0.6) calc(var(--s) * 0.95);
+  font-size: calc(var(--s) * 0.72);
+  text-transform: uppercase;
+  letter-spacing: var(--caps);
+  color: #8fb0e6;
+  white-space: nowrap;
+}
+.live-dot {
+  width: calc(var(--s) * 0.55);
+  height: calc(var(--s) * 0.55);
+  border-radius: 50%;
+  background: var(--hadir);
+  animation: livepulse 2s ease-in-out infinite;
+}
+.live-warn {
+  color: var(--alert);
+}
+.live-warn .live-dot {
+  background: var(--alert);
+}
+@keyframes livepulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+/* ── KPI band ─────────────────────────────────────────────── */
+.kpi-band {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: calc(var(--s) * 1.2);
+}
+.kpi {
+  background: var(--ink-1);
+  border: 1px solid var(--rule-1);
+  border-radius: calc(var(--s) * 1);
+  padding: calc(var(--s) * 1.35) calc(var(--s) * 1.6);
+}
+.kpi-label {
+  font-size: calc(var(--s) * 0.8);
+  text-transform: uppercase;
+  letter-spacing: var(--caps);
+  color: var(--text-3);
+  font-weight: 600;
+}
+.kpi-val {
+  margin-top: calc(var(--s) * 0.55);
+  font-size: calc(var(--s) * 3.4);
+  font-weight: 800;
+  line-height: 1;
+}
+.kpi-den {
+  font-size: calc(var(--s) * 1.6);
+  color: var(--text-3);
+  font-weight: 600;
+}
+.kpi-sub {
+  margin-top: calc(var(--s) * 0.55);
+  font-size: calc(var(--s) * 0.76);
+  color: var(--text-2);
+}
+.kpi-hadir { color: var(--hadir); }
+.kpi-alert { color: var(--alert); }
+.kpi-danger { color: var(--danger); }
+
+
+/* ── program wall ─────────────────────────────────────────── */
+.wall-wrap {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.wall-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: calc(var(--s) * 0.9);
+  font-size: calc(var(--s) * 0.82);
+  text-transform: uppercase;
+  letter-spacing: var(--caps);
+  color: var(--text-3);
+  font-weight: 600;
+}
+.wall-legend {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--s) * 0.55);
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--text-2);
+}
+.wall-legend i {
+  width: calc(var(--s) * 0.55);
+  height: calc(var(--s) * 0.55);
+  border-radius: 50%;
+  margin-left: calc(var(--s) * 0.8);
+}
+.dot-selesai { background: var(--hadir); }
+.dot-berjalan { background: var(--accent); }
+.dot-belum { background: var(--alert); }
+
+.wall {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 1fr;
+  gap: calc(var(--s) * 0.9);
+  overflow: hidden;
+}
+.unit {
+  background: var(--ink-1);
+  border: 1px solid var(--rule-1);
+  border-left: calc(var(--s) * 0.28) solid var(--rule-2);
+  border-radius: calc(var(--s) * 0.8);
+  padding: calc(var(--s) * 1) calc(var(--s) * 1.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 0;
+}
+.unit-selesai { border-left-color: var(--hadir); }
+.unit-berjalan { border-left-color: var(--accent); }
+.unit-belum { border-left-color: var(--alert); }
+.unit-idle { opacity: 0.55; }
+.unit-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: calc(var(--s) * 0.5);
+}
+.unit-name {
+  font-size: calc(var(--s) * 1.05);
+  font-weight: 700;
+  line-height: 1.15;
+}
+.unit-meta {
+  margin-top: calc(var(--s) * 0.25);
+  font-size: calc(var(--s) * 0.68);
+  color: var(--text-3);
+}
+.unit-pill {
+  flex: none;
+  font-size: calc(var(--s) * 0.6);
+  text-transform: uppercase;
+  letter-spacing: var(--caps);
+  border-radius: calc(var(--s) * 0.35);
+  padding: calc(var(--s) * 0.18) calc(var(--s) * 0.5);
+  color: var(--text-2);
+  background: #0d1826;
+  border: 1px solid var(--rule-1);
+}
+.unit-selesai .unit-pill { color: var(--hadir); }
+.unit-berjalan .unit-pill { color: var(--accent); }
+.unit-belum .unit-pill { color: var(--alert); }
+.unit-bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+.unit-num {
+  font-size: calc(var(--s) * 1.9);
+  font-weight: 800;
+  line-height: 1;
+}
+.unit-den {
+  font-size: calc(var(--s) * 0.9);
+  color: var(--text-3);
+  font-weight: 600;
+}
+.unit-pct {
+  font-size: calc(var(--s) * 0.78);
+  color: var(--text-2);
+}
+.unit-idle {
+  font-size: calc(var(--s) * 1.5);
+  color: var(--text-3);
+}
+
+/* ── ticker ───────────────────────────────────────────────── */
+.ticker {
+  background: var(--ink-1);
+  border: 1px solid var(--rule-1);
+  border-radius: calc(var(--s) * 0.7);
+  height: calc(var(--s) * 2.8);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.ticker-tag {
+  flex: none;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: calc(var(--s) * 0.5);
+  padding: 0 calc(var(--s) * 1.1);
+  background: var(--accent);
+  color: #fff;
+  font-size: calc(var(--s) * 0.78);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--caps);
+}
+.ticker-view {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.ticker-track {
+  display: inline-block;
+  white-space: nowrap;
+  animation: ticker 46s linear infinite;
+}
+.ticker-item {
+  font-size: calc(var(--s) * 0.82);
+  color: var(--text-1);
+  padding: 0 calc(var(--s) * 1.2);
+}
+.ticker-sep {
+  color: var(--text-3);
+  margin-left: calc(var(--s) * 2.4);
+}
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track { animation: none; }
+  .live-dot { animation: none; }
+}

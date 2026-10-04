@@ -1,0 +1,5 @@
+# Auto-HTTPS reverse proxy. Caddy fetches a Let's Encrypt cert for the domain
+# (needs ports 80/443 open + DNS A record → this VPS, both already set).
+dashboard.example.org {
+	reverse_proxy app:3000
+}

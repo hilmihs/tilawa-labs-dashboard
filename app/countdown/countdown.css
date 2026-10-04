@@ -1,0 +1,36 @@
+/*
+ * Papan Countdown — kanvas tetap 3840×2160, diskalakan penuh ke layar.
+ *
+ * Berbeda dari /tv yang memakai satuan viewport (--s) untuk menyusun geometri
+ * langsung dalam CSS, papan ini menggambar pada kanvas piksel tetap lalu
+ * menskalakannya lewat transform di Board.tsx. Konsekuensinya: hampir semua
+ * gaya hidup di komponen, dan file ini hanya menyimpan yang tak bisa ditulis
+ * inline — keyframes, dan penguncian scroll dokumen.
+ */
+
+.countdown-root {
+  min-height: 100vh;
+  background: #0a0f0e;
+  color: #f3f7f5;
+  font-family: var(--font-countdown), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+@keyframes countdownTicker {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Pergantian halaman kartu: halaman baru muncul pelan, tanpa menggeser layout. */
+@keyframes countdownFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

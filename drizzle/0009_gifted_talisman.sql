@@ -1,0 +1,1 @@
+ALTER TABLE "warning_letters" ADD COLUMN "letter_number" text;

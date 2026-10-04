@@ -1,0 +1,1 @@
+ALTER TABLE "programs" ADD COLUMN "config" jsonb;

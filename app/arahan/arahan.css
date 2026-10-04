@@ -1,0 +1,39 @@
+/*
+ * Papan Arahan — kanvas tetap 3840×2160, diskalakan penuh ke layar.
+ *
+ * Sama seperti /countdown dan berbeda dari /tv: geometri digambar pada kanvas
+ * piksel tetap lalu diskalakan lewat transform di Board.tsx, supaya 720p dan 4K
+ * menampilkan komposisi yang persis sama. Akibatnya hampir semua gaya hidup di
+ * komponen, dan file ini hanya menyimpan yang tak bisa ditulis inline.
+ */
+
+.arahan-root {
+  min-height: 100vh;
+  background: #0a0f0e;
+  color: #f3f7f5;
+  font-family: var(--font-arahan), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+@keyframes arahanFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Halaman rotasi masuk dengan satu gerakan pendek. Papan ini dilihat dari jauh;
+   tanpa transisi, pergantian halaman terbaca sebagai kedipan, bukan pergantian. */
+.arahan-page {
+  animation: arahanFadeIn 420ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arahan-page {
+    animation: none;
+  }
+}

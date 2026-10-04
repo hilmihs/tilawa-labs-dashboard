@@ -1,0 +1,1 @@
+ALTER TABLE "guru_sync" ADD COLUMN "gender" integer;

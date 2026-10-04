@@ -1,0 +1,412 @@
+/*
+ * Form pengisian arahan.
+ *
+ * Berbeda dari papannya: ini dibuka dari HP sambil berdiri di ruang rapat, jadi
+ * tidak ada kanvas tetap dan tidak ada penskalaan — ukurannya benar-benar
+ * responsif, dengan target sentuh yang tidak pernah lebih kecil dari 44 px.
+ * Tokennya sama persis dengan papan supaya keduanya terbaca sebagai satu sistem.
+ */
+
+.isi {
+  --bg: #0a0f0e;
+  --panel: #131c1a;
+  --panel-2: #1b2724;
+  --line: #25332f;
+  --text: #f3f7f5;
+  --muted: #8fa5a0;
+  --faint: #5f736f;
+  --accent: #34d399;
+  --danger: #f87171;
+
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  padding: 28px 20px 64px;
+}
+
+.isi-wrap {
+  max-width: 620px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/*
+ * Baris navigasi di atas judul. Sengaja kecil dan datar: ini jalan keluar, bukan
+ * ajakan — yang datang ke halaman ini datang untuk mengisi arahan. Margin
+ * negatif menariknya rapat ke judul supaya tidak memakan satu blok penuh dari
+ * gap 28 px milik .isi-wrap.
+ */
+.isi-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin-bottom: -14px;
+  font-size: 13px;
+}
+
+.isi-nav a {
+  color: var(--faint);
+  text-decoration: none;
+  padding: 6px 0;
+  min-height: 28px;
+}
+
+.isi-nav a:hover,
+.isi-nav a:focus-visible {
+  color: var(--text);
+}
+
+.isi-nav .isi-nav-home {
+  color: var(--muted);
+  font-weight: 600;
+  margin-right: auto;
+}
+
+.isi-head h1 {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.isi-head p {
+  margin: 8px 0 0;
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.isi-tabs {
+  display: flex;
+  gap: 8px;
+  background: var(--panel);
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  padding: 6px;
+}
+
+.isi-tab {
+  flex: 1;
+  min-height: 46px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.isi-tab[aria-selected="true"] {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.isi-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.isi-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.isi-label .req {
+  color: var(--danger);
+}
+
+.isi-label .opt {
+  color: var(--faint);
+  font-weight: 400;
+}
+
+.isi-hint {
+  font-size: 13px;
+  color: var(--faint);
+}
+
+.isi input[type="text"],
+.isi input[type="date"],
+.isi select,
+.isi textarea {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 52px;
+  background: var(--panel);
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  padding: 12px 16px;
+  color: var(--text);
+  font: inherit;
+  font-size: 16px; /* di bawah 16px iOS memperbesar halaman saat field difokus */
+  font-weight: 500;
+}
+
+.isi textarea {
+  min-height: 120px;
+  resize: vertical;
+  line-height: 1.4;
+}
+
+.isi input:focus,
+.isi select:focus,
+.isi textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.14);
+}
+
+.isi-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.isi-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--panel-2);
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.isi-chip button {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--muted);
+  font: inherit;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.isi-suggest {
+  background: transparent;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 14px;
+  color: var(--faint);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.isi-suggest:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+.isi-btn {
+  width: 100%;
+  min-height: 56px;
+  border: 0;
+  border-radius: 16px;
+  background: var(--accent);
+  color: var(--bg);
+  font: inherit;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.isi-btn:disabled {
+  opacity: 0.55;
+  cursor: progress;
+}
+
+.isi-btn-ghost {
+  background: transparent;
+  border: 2px solid var(--line);
+  color: var(--text);
+}
+
+.isi-btn-danger {
+  background: transparent;
+  border: 2px solid var(--line);
+  color: var(--danger);
+}
+
+.isi-note {
+  border-radius: 14px;
+  padding: 14px 16px;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.isi-note-ok {
+  background: rgba(52, 211, 153, 0.12);
+  border: 2px solid rgba(52, 211, 153, 0.5);
+  color: var(--accent);
+}
+
+.isi-note-err {
+  background: rgba(248, 113, 113, 0.12);
+  border: 2px solid rgba(248, 113, 113, 0.5);
+  color: var(--danger);
+}
+
+.isi-card {
+  display: flex;
+  gap: 16px;
+  background: var(--panel);
+  border: 2px solid var(--line);
+  border-radius: 18px;
+  padding: 16px;
+}
+
+.isi-bar {
+  width: 8px;
+  flex: none;
+  border-radius: 4px;
+}
+
+.isi-card-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.isi-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-wrap: pretty;
+}
+
+.isi-card-meta,
+.isi-card-cp {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.isi-card-side {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.isi-age {
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.isi-age span {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.isi-edit {
+  min-height: 40px;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0 18px;
+  cursor: pointer;
+}
+
+.isi-edit:hover {
+  border-color: var(--accent);
+}
+
+.isi-empty {
+  border: 2px dashed var(--line);
+  border-radius: 18px;
+  padding: 40px 24px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.isi-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--faint);
+}
+
+.isi-foot a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+/* Pemilih pekan di tab Program Pekanan: panah kiri/kanan mengapit label. */
+.isi-week {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 8px;
+}
+
+.isi-week-nav {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 26px;
+  line-height: 1;
+  background: var(--panel-2);
+}
+
+.isi-week-nav:hover,
+.isi-week-nav:focus-visible {
+  background: var(--line);
+}
+
+.isi-week-label {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  text-align: center;
+}
+
+.isi-week-label strong {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.isi-week-label span {
+  font-size: 12px;
+  color: var(--muted);
+}

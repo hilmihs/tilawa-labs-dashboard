@@ -1,0 +1,122 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+# ...kecuali template tanpa nilai. Tanpa baris ini file contoh cuma ada di laptop
+# yang membuatnya, padahal docs/AZURE-ENV-GUIDE.md memakainya sebagai daftar acuan.
+!.env.local.example
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# local file storage (generated SP PDFs — real student PII, never commit)
+/storage
+
+# test/automation artifacts
+/.playwright-mcp
+
+# local-only working files (not for repo)
+# nested repo + roster CSV (PII)
+/docs/HAR_dashboard
+# reference Flask app, kept local only
+/app_hkm.py
+
+# Data exports (PII: nama, WA, email) — never commit
+/exports/
+
+# Database dumps (PII: nama santri, wali, SP) — never commit
+/backup-*.sql
+/*.dump
+
+# WhatsApp drops landing in the repo root (signatures, screenshots) — the
+# signature used by the surat generator lives in assets/surat/ttd-signer.jpg
+# (assets/, not public/: it must not be web-servable)
+/WhatsApp*.jpeg
+/WhatsApp*.jpg
+
+# Roster/attendance/report drops in repo root (PII: nama santri, WA, penilaian).
+# xlsx/pdf/docx exports and one-off spreadsheets are never source — keep local.
+/*.xlsx
+/*.pdf
+/*.docx
+/*.csv
+
+# One-off operational scripts (probe/enroll/fix/aduan). Contain real santri
+# names, WA numbers, and account IDs hardcoded for a single ops task — local
+# only, never part of the app. Reusable scripts live under package.json "scripts".
+/scripts/probe-*.ts
+/scripts/enroll-*.ts
+/scripts/aduan-*.ts
+/scripts/abk-crosscheck*.ts
+/scripts/fix-*.ts
+/scripts/hkm6-akhwat.ts
+/scripts/mengulang-report.ts
+/scripts/rbi-jam-*.ts
+/scripts/tmp-*.ts
+# Menambah/menyunting satu orang: nomor WA-nya ada di dalam berkas, hardcoded.
+/scripts/tambah-peserta-*.ts
+/scripts/tambah-farida-*.ts
+/scripts/update-phone-*.ts
+/scripts/hkm-redesign-*.ts
+
+# Ops incident/working notes (PII in body). Curated docs stay tracked explicitly.
+/docs/ADUAN-*.md
+/docs/CRASH-*.md
+# Per-program audit notes: rosters, nama pengajar, dan satu file dengan 151 nomor
+# WA. Hasil satu penelusuran, bukan dokumentasi — dan tak satu pun pernah tracked.
+/docs/HITS-*.md
+/docs/HKM-*.md
+# Spreadsheet dan folder ekspor yang mendarat di docs/ (PII: nama peserta).
+/docs/*.xlsx
+/docs/Haqibatul Mu'allim/
+
+# Python bytecode from the ops scripts (hitung_unik dan kawan-kawannya).
+/scripts/__pycache__/
+
+# Editor/one-off leftovers that keep drifting into `git status` and hide the
+# real changes: backups of tracked files, tempelan layar, dan folder laporan
+# bulanan yang isinya xlsx hasil generate (PII: nama santri dan pengajar).
+*.bak
+/Pasted*.png
+/laporan-*/
+/docs/backup/
+
+# Berkas sumber LIPIA 2 (docx/xlsx/pdf, nama panitia + kemungkinan nomor HP). Dibaca skrip impor dari disk, tidak diarsipkan di git.
+/docs/nawa/
+node_modules/
+.env.local
+.env.vercel-demo

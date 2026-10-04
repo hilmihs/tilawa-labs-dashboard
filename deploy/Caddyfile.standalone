@@ -1,0 +1,7 @@
+# Auto-HTTPS reverse proxy for the standalone compose (bundled caddy service).
+# Replace the domain below with the new VPS's domain. Needs 80/443 open + a DNS
+# A record pointing that domain → this VPS's public IP (Let's Encrypt validates
+# over HTTP). Also set APP_BASE_URL in deploy/.env to the same https:// URL.
+CHANGEME.example.com {
+	reverse_proxy app:3000
+}

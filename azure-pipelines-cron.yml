@@ -1,0 +1,71 @@
+# Sync terjadwal untuk dashboard.edu.example.org.
+#
+# Dipakai kalau tidak ada akses SSH ke server IDCH untuk memasang crontab. Pipeline
+# ini tidak men-deploy apa pun — ia hanya memukul endpoint cron aplikasi dengan
+# Bearer CRON_SECRET, persis seperti yang crontab lakukan.
+#
+# Pasang: Pipelines → New pipeline → Existing Azure Pipelines YAML file → file ini.
+# Setelah tersimpan, matikan trigger CI-nya di UI (Triggers → Override → disable),
+# supaya tidak ikut jalan tiap push.
+#
+# Waktu cron di Azure memakai UTC. WIB = UTC+7, jadi 22:00 UTC = 05:00 WIB.
+
+trigger: none
+pr: none
+
+schedules:
+  # Jadwal dibedakan supaya empat sync tidak menumpuk di menit yang sama.
+  - cron: "5,35 * * * *"
+    displayName: Sync tilawah tiap 30 menit
+    branches:
+      include:
+        - main
+    always: true
+
+variables:
+  - group: DashboardEdu-Prod
+
+# Agent pool milik tim server ("Self Hosted"), bukan agent Microsoft-hosted —
+# arahan tim server 24 Sep 2026 (sebelumnya deploy 23 Sep tertahan > 50 menit).
+# Build tetap terjadi di server IDCH lewat SSH; agent hanya butuh bash, curl,
+# dan python3 (dipakai langkah render app.env).
+pool:
+  name: Self Hosted
+
+steps:
+  - task: Bash@3
+    displayName: "🔄 Panggil endpoint cron"
+    env:
+      # Bergembok di Library → wajib dipetakan eksplisit, sama seperti pipeline deploy.
+      ENV_CRON_SECRET: $(ENV_CRON_SECRET)
+    inputs:
+      targetType: "inline"
+      script: |
+        set -eu
+        BASE="${ENV_APP_BASE_URL:-https://dashboard.edu.example.org}"
+        [ -n "${ENV_CRON_SECRET:-}" ] || { echo "❌ ENV_CRON_SECRET kosong"; exit 1; }
+
+        # Endpoint yang tersedia: sync-tilawah, sync-hkm, sync-mabni,
+        # sync-maahir, refresh-scorecard. Tambah/kurangi sesuai program yang
+        # dipakai — kalau jadwalnya harus beda-beda, bikin entry `schedules:`
+        # sendiri dan pisahkan daftar ini per pipeline. Semua memakai CRON_SECRET
+        # yang sama. Sync-nya anti-overlap sendiri lewat isSyncRunning, jadi
+        # panggilan yang tumpang tindih aman — ia hanya melapor "sedang jalan".
+        #
+        # Urutan bukan selera: loop ini `exit 1` pada respons non-200 pertama,
+        # jadi yang paling penting didahulukan. `sync-maahir` di belakang supaya
+        # kegagalannya tidak ikut menghentikan sync tilawah.
+        #
+        # `sync-maahir` aman di jadwal 30 menit meski API-nya menganjurkan
+        # tarikan harian: route-nya menahan diri dan jadi no-op (tetap 200)
+        # kecuali sukses terakhir sudah lebih dari 6 jam. Lihat
+        # app/api/cron/sync-maahir/route.ts. Ia menjawab 500 kalau tidak ada
+        # program ber-data_source_type 'maahir_api' — itu memang dimaksudkan
+        # terlihat, bukan didiamkan.
+        for path in sync-tilawah sync-maahir; do
+          code=$(curl -s -o /tmp/out.json -w '%{http_code}' --max-time 600 \
+            -H "Authorization: Bearer ${ENV_CRON_SECRET}" "$BASE/api/cron/$path")
+          echo "→ /api/cron/$path : $code"
+          head -c 500 /tmp/out.json; echo
+          [ "$code" = "200" ] || exit 1
+        done

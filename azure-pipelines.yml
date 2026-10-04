@@ -1,0 +1,421 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pr:
+  branches:
+    include:
+      - main
+
+variables:
+  - group: DashboardEdu-Prod # Gunakan prefix ENV_
+
+# Agent pool milik tim server ("Self Hosted"), bukan agent Microsoft-hosted —
+# arahan tim server 24 Sep 2026 (sebelumnya deploy 23 Sep tertahan > 50 menit).
+# Build tetap terjadi di server IDCH lewat SSH; agent hanya butuh bash, curl,
+# dan python3 (dipakai langkah render app.env).
+pool:
+  name: Self Hosted
+
+steps:
+  - task: Bash@3
+    displayName: "🔧 Render app.env dari Variable Group"
+    env:
+      # Variabel bertanda secret (ikon gembok) TIDAK di-inject ke environment task
+      # oleh Azure DevOps — harus dipetakan eksplisit di sini. Kalau lupa, nilainya
+      # kosong tanpa error dan aplikasi mati saat runtime. Tambahkan satu baris
+      # untuk setiap variabel bergembok yang dipakai app.
+      ENV_DATABASE_URL: $(ENV_DATABASE_URL)
+      ENV_AUTH_SECRET: $(ENV_AUTH_SECRET)
+      ENV_TILAWAH_LOGIN_PASSWORD: $(ENV_TILAWAH_LOGIN_PASSWORD)
+      ENV_CRON_SECRET: $(ENV_CRON_SECRET)
+      ENV_OPS_SECRET: $(ENV_OPS_SECRET)
+      ENV_AGENT_TOKEN: $(ENV_AGENT_TOKEN)
+      # Sumber non-tilawah. Tanpa baris ini nilainya kosong tanpa error dan
+      # sync-nya gagal saat runtime, bukan saat deploy — persis yang terjadi ke
+      # HKM di dashboard.edu ("login berkah gagal: BERKAH_LOGIN_EMAIL /
+      # BERKAH_LOGIN_PASSWORD not set", 9 Sep 2026). Variabel yang belum ada di
+      # Library dilewati step render sambil mencetak "(lewat) NAMA".
+      ENV_BERKAH_LOGIN_PASSWORD: $(ENV_BERKAH_LOGIN_PASSWORD)
+      ENV_MABNI_LOGIN_PASSWORD: $(ENV_MABNI_LOGIN_PASSWORD)
+      ENV_MAAHIR_API_KEY: $(ENV_MAAHIR_API_KEY)
+      # Bearer GET /api/export/semua di nawaroom.id (tombol "Tarik semua program
+      # NAWA" di /acara). Tanpa baris ini tombolnya menjawab "NAWA_EXPORT_TOKEN
+      # belum diset" walau sudah diisi di Library. Di Library namanya TANPA
+      # awalan ENV_ (disimpan 1 Okt 2026), jadi dipetakan dari nama itu.
+      ENV_NAWA_EXPORT_TOKEN: $(NAWA_EXPORT_TOKEN)
+    inputs:
+      targetType: "inline"
+      script: |
+        set -eu
+        echo "🔄 Export Variable Group (prefix ENV_ dilepas) → app.env"
+
+        # KEY=VALUE satu baris per variabel, nilai apa adanya (bukan `export
+        # KEY="..."`: password ber-$ / backtick / kutip akan ke-expand shell).
+        python3 - <<'PY' > app.env
+        import os, sys
+
+        SKIP = {"ENV_APP_NAME"}  # metadata pipeline, bukan env aplikasi
+        for key, value in sorted(os.environ.items()):
+            if not key.startswith("ENV_") or key in SKIP:
+                continue
+            if value == "":
+                continue  # variabel secret yang belum dipetakan / sengaja kosong
+            # Azure membiarkan $(NAMA) apa adanya kalau NAMA tidak ada di variable
+            # group — blok env: di bawah memetakan lebih banyak nama daripada yang
+            # benar-benar diisi. Anggap tidak terisi; sumber kebenarannya memang
+            # /etc/dashboard-edu.env di server, group ini cuma pelengkap.
+            if value.startswith("$(") and value.endswith(")"):
+                print(f"   (lewat) {key}: tidak ada di variable group", file=sys.stderr)
+                continue
+            if "\n" in value or "\r" in value:
+                raise SystemExit(f"{key}: nilai multiline tidak didukung")
+            # Bentuk yang di-salah-artikan parser dotenv (.env.local) atau systemd:
+            # kutip di awal nilai dianggap quoting, " #" dianggap awal komentar.
+            if value[0] in "\"'" or " #" in value or value != value.strip():
+                raise SystemExit(
+                    f"{key}: nilai tidak boleh diawali kutip, memuat ' #', "
+                    "atau punya spasi di ujung"
+                )
+            print(f"{key[4:]}={value}")
+        PY
+
+        # Tidak ada variabel yang wajib di sini: DATABASE_URL/AUTH_SECRET boleh hanya
+        # ada di /etc/dashboard-edu.env. Yang memeriksa kelengkapan adalah step deploy,
+        # setelah kedua sumber digabung.
+        # Jangan pernah cat isinya — nama saja.
+        echo "✅ $(wc -l < app.env) variabel dari variable group:"
+        cut -d= -f1 app.env | sed 's/^/   - /'
+
+  #⬇️ Kirim app.env ke server via SCP
+  - task: CopyFilesOverSSH@0
+    displayName: "📤 Upload app.env to server"
+    inputs:
+      sshEndpoint: "Server Apps IDCH 2"
+      sourceFolder: "."
+      contents: "app.env"
+      targetFolder: "/var/www/html/dashboard-edu"
+      cleanTargetFolder: false
+      overwrite: true
+  - task: Ssh@0
+    displayName: "🚀 Deploy Next.js Frontend"
+    inputs:
+      sshEndpoint: "Server Apps IDCH 2"
+      runOptions: "inline"
+      failOnStdErr: false
+      inline: |
+        echo "🚀 START: Deploy Next.js Frontend"
+        set -euo pipefail 2>/dev/null || set -eu
+
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+        cd /var/www/html/dashboard-edu
+        echo "📂 Current folder: $(pwd)"
+
+        echo "🔐 Gabung env (server = sumber kebenaran, variable group = pelengkap)"
+        # `next build` membaca .env.local dari root repo. Runtime standalone TIDAK:
+        # server.js chdir ke .next/standalone/ (yang dihapus tiap deploy), jadi env
+        # runtime datang dari /etc/dashboard-edu.env lewat EnvironmentFile systemd.
+        #
+        # Dua file env, dua pemilik, tidak pernah saling menulis:
+        #   /etc/dashboard-edu.env           — manusia (tim server). Pipeline hanya baca.
+        #   /etc/dashboard-edu-pipeline.env  — pipeline, isinya kunci yang HANYA ada di
+        #                                      variable group. Ditimpa tiap deploy.
+        # Unit systemd memuat keduanya. Kunci yang sudah ada di file manusia tidak
+        # pernah ikut ke file pipeline, jadi aturan "server menang" tetap berlaku
+        # tanpa membuat rotasi di Library jadi sia-sia.
+        umask 077
+        # Identitas mesin + jejak file. Kalau orang yang menyunting melihat mtime atau
+        # hostname yang berbeda dari yang tercetak di sini, dia menyunting file lain
+        # (atau box lain) dan tidak ada format apa pun yang akan memperbaikinya.
+        echo "   host=$(hostname) ip=$(hostname -I 2>/dev/null | awk '{print $1}')"
+        echo "   file=$(sudo -n stat -c '%n mtime=%y size=%s' /etc/dashboard-edu.env 2>/dev/null || echo 'tidak ada / tidak terbaca')"
+
+        if sudo -n test -f /etc/dashboard-edu.env 2>/dev/null; then
+          # Buang baris `KEY=$(ENV_KEY)` — sisa deploy lama yang menyalin makro Azure
+          # yang tidak pernah ter-expand ke file ini. Dibiarkan, nilai sampah itu
+          # "menang" atas variable group dan aplikasi mati dengan pesan aneh.
+          sudo -n cat /etc/dashboard-edu.env > server.raw
+          # Normalisasi bentuk yang wajar ditulis manusia: indentasi, `export` di depan
+          # (kebiasaan file yang di-`source` shell), dan spasi mengapit '='. systemd
+          # sendiri tidak menerima ketiganya, tapi menormalkannya di sini jauh lebih
+          # baik daripada kunci hilang diam-diam.
+          #
+          # Satu kunci bisa muncul dua kali karena orang menambah dengan append;
+          # systemd memakai yang terakhir, jadi samakan. Urutan cetak = urutan
+          # kemunculan pertama, supaya diff antar deploy enak dibaca.
+          sed -E 's/^[[:space:]]+//
+                  s/^export[[:space:]]+//
+                  s/[[:space:]]+$//
+                  s/^([A-Za-z_][A-Za-z0-9_]*)[[:space:]]*=[[:space:]]*/\1=/' server.raw > server.norm
+          sed -E '/^[A-Za-z_][A-Za-z0-9_]*=\$\([A-Za-z_]+\)$/d' server.norm \
+            | awk -F= '
+                /^[A-Za-z_][A-Za-z0-9_]*=/ { if (!($1 in val)) order[++n]=$1; val[$1]=$0 }
+                END { for (i = 1; i <= n; i++) print val[order[i]] }
+              ' > server.env
+
+          # Baris yang tidak terbaca HARUS bersuara, dan harus cukup spesifik untuk
+          # ditindaklanjuti — "5 baris ditolak" tanpa menyebut bentuknya membuat dua
+          # orang berdebat apakah nilainya sudah di-set atau belum. Yang dicetak cuma
+          # bagian SEBELUM '=', dikurung [] supaya spasi di ujung kelihatan.
+          awk '
+            /^[[:space:]]*($|#)/ { next }
+            /^[A-Za-z_][A-Za-z0-9_]*=/ { next }
+            {
+              if (index($0, "=") > 0)
+                printf "      • ditolak, kunci [%s]\n", substr($0, 1, index($0, "=") - 1)
+              else
+                printf "      • ditolak, tidak ada tanda = (%d karakter)\n", length($0)
+            }
+          ' server.norm > server.bad
+          # Baris makro tidak masuk hitungan "ditolak" (bentuknya sah KEY=VALUE), jadi
+          # tanpa laporan ini file yang isinya sampah warisan terlihat kosong begitu
+          # saja — persis yang membuat orang mengira suntingannya hilang.
+          macros="$(grep -cE '^[A-Za-z_][A-Za-z0-9_]*=\$\([A-Za-z_]+\)$' server.norm || true)"
+          if [ "${macros:-0}" -gt 0 ]; then
+            echo "   ℹ️ $macros baris sisa deploy lama berbentuk KEY=\$(ENV_X) dibuang:"
+            grep -E '^[A-Za-z_][A-Za-z0-9_]*=\$\([A-Za-z_]+\)$' server.norm \
+              | cut -d= -f1 | sed 's/^/      • /'
+          fi
+          if [ -s server.bad ]; then
+            echo "   ⚠️ Baris berikut di /etc/dashboard-edu.env tidak terbaca sebagai KEY=VALUE:"
+            cat server.bad
+          fi
+          # Kunci huruf kecil tidak dinaikkan otomatis — aplikasi membaca nama
+          # persis, jadi menebak maksudnya lebih berbahaya daripada mengeluh.
+          if grep -qE '^[a-z_][A-Za-z0-9_]*=' server.env; then
+            echo "   ⚠️ Ada kunci huruf kecil; aplikasi membaca nama huruf besar:"
+            grep -E '^[a-z_][A-Za-z0-9_]*=' server.env | cut -d= -f1 | sed 's/^/      • /'
+          fi
+          rm -f server.raw server.norm server.bad
+        else
+          echo "   ⚠️ /etc/dashboard-edu.env tidak ada / tidak terbaca — hanya pakai variable group"
+          : > server.env
+        fi
+
+        # $1 di awk = kunci karena -F=; nilai yang memuat '=' tetap utuh karena yang
+        # dicetak adalah $0.
+        awk -F= '
+          NR==FNR { if ($0 ~ /^[A-Za-z_][A-Za-z0-9_]*=/) { seen[$1]=1; print } next }
+          $0 ~ /^[A-Za-z_][A-Za-z0-9_]*=/ && !($1 in seen) { print }
+        ' server.env app.env > merged.env
+
+        echo "🔐 Env terpasang (nama + asalnya, tanpa nilai):"
+        awk -F= 'NR==FNR { if ($0 ~ /^[A-Za-z_]/) s[$1]=1; next }
+                 { printf "   - %s (%s)\n", $1, ($1 in s ? "server" : "variable group") }' \
+          server.env merged.env
+
+        for required in DATABASE_URL AUTH_SECRET; do
+          grep -q "^${required}=" merged.env || {
+            echo "❌ $required tidak ada di /etc/dashboard-edu.env maupun variable group."
+            exit 1
+          }
+        done
+
+        # Dua format berbeda, jangan ditukar:
+        #  - .env.local dibaca @next/env = dotenv + dotenv-expand. `$` di dalam nilai
+        #    dianggap referensi variabel: password `pa$$word` jadi `pa` diam-diam.
+        #    Karena itu setiap `$` di-escape jadi `\$` (terverifikasi @next/env 16.2.10).
+        #  - /etc/dashboard-edu.env dibaca systemd = literal, TANPA expansion, jadi
+        #    dipakai apa adanya. Kalau di-escape juga, backslash-nya ikut masuk nilai.
+        sed 's/\$/\\$/g' merged.env > .env.local
+        chmod 600 .env.local
+        # Salin dulu yang lama. File ini disunting manual oleh orang lain dan tidak
+        # dilacak git di mana pun — sekali tertimpa, tidak ada tempat mengambilnya
+        # kembali selain memori proses yang sedang jalan.
+        # /etc/dashboard-edu.env TIDAK PERNAH ditulis pipeline — itu file manusia.
+        # Kunci dari variable group masuk ke file terpisah, dan unit systemd memuat
+        # keduanya (lihat docs/AZURE-ENV-RUNBOOK.md Tahap 6).
+        #
+        # Kenapa dipisah: sampai 8 Sep 2026 pipeline menulis balik hasil gabungan ke
+        # file manusia. Nilai yang asalnya dari Library ikut mendarat di sana, dan
+        # karena file server menang, rotasi berikutnya di Library tidak akan pernah
+        # terpakai — berubah di satu tempat, diabaikan diam-diam.
+        #
+        # Kunci yang SUDAH ada di file server tidak ikut: itu milik server, dan
+        # aturannya tetap server menang.
+        awk -F= '
+          NR==FNR { if ($0 ~ /^[A-Za-z_][A-Za-z0-9_]*=/) seen[$1]=1; next }
+          $0 ~ /^[A-Za-z_][A-Za-z0-9_]*=/ && !($1 in seen) { print }
+        ' server.env app.env > library.env
+
+        if [ -s library.env ]; then
+          echo "   → $(wc -l < library.env) kunci variable group ke /etc/dashboard-edu-pipeline.env"
+          sudo install -m 600 -o root -g root library.env /etc/dashboard-edu-pipeline.env
+        else
+          echo "   → tidak ada kunci khusus variable group; /etc/dashboard-edu-pipeline.env dikosongkan"
+          : > library.env
+          sudo install -m 600 -o root -g root library.env /etc/dashboard-edu-pipeline.env
+        fi
+        # drizzle-kit dan scripts/env.ts memakai `dotenv` polos (tanpa dotenv-expand),
+        # jadi mereka membaca `\$` di .env.local apa adanya dan password ber-$ jadi
+        # salah. Ambil nilai mentahnya dari merged.env. dotenv tidak menimpa variabel
+        # yang sudah ada di environment, jadi nilai ini yang menang.
+        DB_URL="$(sed -n 's/^DATABASE_URL=//p' merged.env)"
+        # Dipakai smoke test di akhir: satu-satunya cara membuktikan proses yang BARU
+        # naik benar-benar bisa memakai env dan menyentuh database.
+        OPS_VAL="$(sed -n 's/^OPS_SECRET=//p' merged.env)"
+        rm -f app.env server.env merged.env library.env
+        # Kembalikan umask SEKARANG. Kalau 077 dibiarkan sampai `npm run build`,
+        # seluruh isi .next lahir mode 600 milik user deploy, dan service yang jalan
+        # sebagai www-data tidak bisa membacanya — Node melaporkannya sebagai
+        # "Cannot find module .../server.js", yang menyesatkan ke arah versi Node.
+        umask 022
+        # File kredensial versi lama: ada di bawah /var/www/html, bisa ke-serve
+        # sebagai static kalau ada web server lain memakai folder ini sebagai root.
+        rm -f env_vars.sh
+
+        echo "⬇️ Git sync Web dashboard-edu (strict)"
+        git fetch origin main
+        git reset --hard origin/main
+        echo "📌 Deployed commit: $(git log -1 --oneline)"
+
+        echo "📦 Install dependency Web dashboard-edu"
+        nvm exec 22.14.0 npm install
+
+        # Sengaja sebelum `systemctl stop`: service lama masih melayani traffic, dan
+        # kalau migrasi gagal script berhenti di sini tanpa downtime sama sekali.
+        # Keduanya idempotent — drizzle mencatat migrasi terpakai di tabel
+        # __drizzle_migrations, seed-programs upsert by slug.
+        # Preflight: drizzle-kit hanya mencetak spinner "applying migrations..." saat
+        # koneksinya menggantung, jadi kegagalan paling umum (host salah, postgres
+        # belum hidup, port ditutup) terlihat sebagai step yang mati tanpa pesan.
+        # Node dipakai untuk mengurai URL — password boleh memuat @ dan :, sed tidak.
+        DB_TARGET="$(DATABASE_URL="$DB_URL" nvm exec --silent 22.14.0 node -e \
+          'const u=new URL(process.env.DATABASE_URL);process.stdout.write(`${u.hostname} ${u.port||5432} ${u.pathname.slice(1)}`)')"
+        set -- $DB_TARGET
+        echo "🗄️ Migrasi schema database → host=$1 port=$2 db=$3"
+        timeout 10 bash -c ">/dev/tcp/$1/$2" 2>/dev/null || {
+          echo "❌ Tidak bisa membuka TCP ke $1:$2 dalam 10 detik."
+          echo "   Postgres belum hidup di sana, port tertutup, atau host di"
+          echo "   ENV_DATABASE_URL salah. Cek di server: sudo ss -lntp | grep $2"
+          exit 1
+        }
+
+        if ! DATABASE_URL="$DB_URL" nvm exec 22.14.0 timeout 300 npx drizzle-kit migrate; then
+          echo "❌ Migrasi gagal atau lewat 300 detik. Service lama tetap jalan."
+          exit 1
+        fi
+
+        echo "🌱 Seed baris programs"
+        DATABASE_URL="$DB_URL" nvm exec 22.14.0 npx tsx scripts/seed-programs.ts
+
+        # Build DULU, service lama masih melayani traffic — urutan ini bukan gaya.
+        # Sampai 8 Sep 2026 `systemctl stop` ada di atas blok ini (komentarnya sudah
+        # menjanjikan build duluan, kodenya tidak), dan akibatnya terlihat hari itu:
+        # stop 12:39 → `rm -rf .next` → build baru selesai 12:42, sementara step-nya
+        # putus sebelum `start`. Hasilnya prod 502 sejam, ditambah 1428 crash-loop di
+        # jendela ketika .next sudah hilang tapi build belum jadi. Dengan build di
+        # atas stop, kegagalan build hanya berarti "versi lama tetap jalan".
+        #
+        # rm .next aman walau service jalan: proses standalone memegang inode file
+        # yang sudah terbuka.
+        echo "🧹 Clean .next lama (file cache runtime standalone bisa owned by root)"
+
+        sudo rm -rf .next
+
+        echo "⚙️ Build Web dashboard-edu (service lama tetap jalan)"
+        # Tanpa cek tipe (next.config.ts → SKIP_BUILD_TYPECHECK). 23 Sep 2026 box
+        # ini macet 55 menit di "Running TypeScript" setelah kompilasi 3,5 menit,
+        # job mati di batas 60 menit, dan prod tertinggal tanpa .next/static.
+        # Cek tipe tetap jalan untuk commit yang sama di build Docker VPS.
+        SKIP_BUILD_TYPECHECK=1 nvm exec 22.14.0 npm run build
+
+        echo "📁 Copy static files to standalone folder"
+        cp -r .next/static .next/standalone/.next/
+
+        # Standalone tidak membawa public/ — tanpa baris ini semua aset public
+        # (logo /brand/*.png di Beranda & rail, mabni-logo.png untuk PDF) 404 di
+        # dashboard.edu, padahal di VPS muncul karena Dockerfile menyalinnya.
+        echo "📁 Copy public/ to standalone folder"
+        cp -r public .next/standalone/
+
+        # Milik user service, bukan user deploy: server.js membacanya sendiri saat
+        # start, dan file 600 milik orang lain menghasilkan EACCES yang berisik di
+        # journal. User-nya dibaca dari unit, bukan ditulis tetap, supaya perubahan
+        # `User=` di unit tidak diam-diam membuat file ini tak terbaca lagi.
+        echo "📁 Copy env ke standalone (cadangan kalau EnvironmentFile belum dipasang)"
+        SVC_USER="$(systemctl show next-dashboard-edu -p User --value 2>/dev/null)"
+        SVC_USER="${SVC_USER:-www-data}"
+        sudo install -m 600 -o "$SVC_USER" -g "$SVC_USER" .env.local .next/standalone/.env.local
+
+        # Service jalan sebagai user lain (www-data) daripada yang membangun, jadi
+        # build harus terbaca olehnya. Ditegakkan di sini, bukan diserahkan ke umask
+        # yang berlaku saat itu — `a+rX` cuma menambah baca untuk file dan telusur
+        # untuk direktori, tidak pernah memberi tulis.
+        echo "🔓 Pastikan build terbaca service (jalan sebagai user lain)"
+        # sudo: .env.local di dalam .next milik user service, dan user deploy tidak
+        # boleh mengubah izin file milik orang lain — `chmod` biasa mati di situ
+        # dengan "Operation not permitted", tepat sebelum service dinyalakan.
+        sudo chmod -R a+rX .next
+        # ...kecuali file kredensial, yang baru saja ikut terbuka oleh perintah di atas.
+        sudo chmod 600 .next/standalone/.env.local
+
+        # Build memakai node 22 lewat nvm, tapi unit systemd punya ExecStart sendiri
+        # dan bisa menunjuk node lain (di ServerDev sempat /usr/bin/node v18).
+        # Next 16 butuh >= 20.9; ketimpangannya baru terasa saat runtime.
+        UNIT_NODE="$(systemctl show next-dashboard-edu -p ExecStart --value 2>/dev/null \
+          | sed -n 's/.*path=\([^ ;]*\).*/\1/p' | head -1)"
+        if [ -x "${UNIT_NODE:-}" ]; then
+          UNIT_NODE_V="$("$UNIT_NODE" -v 2>/dev/null || echo v0)"
+          UNIT_NODE_MAJOR="${UNIT_NODE_V#v}"; UNIT_NODE_MAJOR="${UNIT_NODE_MAJOR%%.*}"
+          if [ "${UNIT_NODE_MAJOR:-0}" -lt 20 ]; then
+            echo "⚠️ unit menjalankan $UNIT_NODE ($UNIT_NODE_V); Next 16 butuh node >= 20.9"
+          else
+            echo "   runtime node: $UNIT_NODE_V ($UNIT_NODE)"
+          fi
+        fi
+
+        # Sejak sini service benar-benar berhenti, jadi tiap keluar lebih awal wajib
+        # menyalakannya lagi: pipeline tidak boleh pernah berakhir dengan prod mati.
+        trap 'sudo systemctl start next-dashboard-edu || true' EXIT
+
+        echo "🛑 Stop systemd service (downtime ~2 detik)"
+        sudo systemctl stop next-dashboard-edu
+
+        echo "🔄 start systemd service (downtime ~2 detik)"
+        sudo systemctl reset-failed next-dashboard-edu 2>/dev/null || true
+        sudo systemctl start next-dashboard-edu
+        sudo systemctl status next-dashboard-edu --no-pager
+
+        # `systemctl status: active` cuma berarti prosesnya hidup. Aplikasi bisa saja
+        # naik dengan DATABASE_URL sampah dan tetap melayani /login dengan 200, karena
+        # halaman itu tidak menyentuh database — persis yang menyembunyikan env rusak
+        # selama tiga deploy. Panggil route yang benar-benar query database.
+        # Port diambil dari unit, tidak ditebak. Di ServerDev unit menyebut 3009,
+        # dan 3000 dipakai aplikasi LAIN (cms-safar, vhost admin./cms.
+        # tilawaprojectsafar.id) — smoke test yang menembak 3000 akan lulus atas
+        # nama tetangga dan melaporkan deploy yang sebenarnya mati sebagai sehat.
+        APP_PORT="$(systemctl show next-dashboard-edu -p Environment --value 2>/dev/null \
+          | tr ' ' '\n' | sed -n 's/^PORT=//p' | tail -1)"
+        APP_PORT="${APP_PORT:-3000}"
+        echo "🔎 Smoke test (port $APP_PORT dari unit systemd)"
+        ok=""
+        for _ in 1 2 3 4 5 6 7 8 9 10; do
+          if curl -fsS -o /dev/null --max-time 5 "http://127.0.0.1:$APP_PORT/login"; then ok=1; break; fi
+          sleep 2
+        done
+        [ -n "$ok" ] || { echo "❌ /login tidak merespons di port $APP_PORT setelah 20 detik"; exit 1; }
+
+        if [ -n "$OPS_VAL" ]; then
+          code="$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 \
+            -H "Authorization: Bearer $OPS_VAL" "http://127.0.0.1:$APP_PORT/api/admin/staff")"
+          if [ "$code" != "200" ]; then
+            echo "❌ /api/admin/staff → $code (bukan 200)."
+            echo "   401 = OPS_SECRET runtime beda dengan yang dipakai deploy —"
+            echo "         EnvironmentFile systemd tidak terbaca."
+            echo "   500 = env sampai tapi query database gagal."
+            exit 1
+          fi
+          echo "   ✅ query database dari proses baru berhasil"
+        else
+          echo "   ⚠️ OPS_SECRET tidak ada — smoke test berhenti di '/login merespons',"
+          echo "      yang TIDAK membuktikan database terhubung."
+        fi
+
+        # Service terbukti melayani; jaring pengaman tidak diperlukan lagi.
+        trap - EXIT
+
+        echo "✅ Next.js frontend deployment selesai"

@@ -1,0 +1,83 @@
+- generic [ref=f1e1]:
+  - generic [ref=f1e2]:
+    - navigation [ref=f1e4]:
+      - link "Beranda" [ref=f1e5] [cursor=pointer]:
+        - /url: /overview
+        - text: م
+      - link "Semua" [ref=f1e6] [cursor=pointer]:
+        - /url: /overview
+      - link "Hadir" [ref=f1e13] [cursor=pointer]:
+        - /url: /hits-regular-jan/dashboard
+      - link "Pesrt" [ref=f1e18] [cursor=pointer]:
+        - /url: /hits-regular-jan/peserta
+      - link "Guru" [ref=f1e25] [cursor=pointer]:
+        - /url: /hits-regular-jan/pengajar
+      - link "Silbs" [ref=f1e30] [cursor=pointer]:
+        - /url: /hits-regular-jan/silabus
+      - link "Aksi" [ref=f1e34] [cursor=pointer]:
+        - /url: /hits-regular-jan/inbox
+      - link "Lprn" [ref=f1e39] [cursor=pointer]:
+        - /url: /hits-regular-jan/report
+      - link "Ubah" [ref=f1e43] [cursor=pointer]:
+        - /url: /hits-regular-jan/perubahan
+      - link "Skor" [ref=f1e53] [cursor=pointer]:
+        - /url: /scorecard
+      - link "Kabar" [ref=f1e59] [cursor=pointer]:
+        - /url: /berita
+      - link "Kurasi" [ref=f1e64] [cursor=pointer]:
+        - /url: /berita/kurasi
+      - generic [ref=f1e69]: DE
+    - generic [ref=f1e70]:
+      - banner [ref=f1e71]:
+        - generic [ref=f1e72]:
+          - generic [ref=f1e73]: Program
+          - combobox "Pindah program" [ref=f1e74]:
+            - option "DPQ"
+            - option "Halaqah Tahfizh Masjid Nurul Iman"
+            - option "HITS Masjid Nurul Iman"
+            - option "HITS Reguler (Batch April 2026)"
+            - option "HITS Reguler (Batch Januari 2026)" [selected]
+            - option "HITS Reguler (Batch Juni 2026)"
+            - option "HITS Safar"
+            - option "HITS Safar (Batch Januari 2026)"
+            - option "HITS untuk Orangtua ABK"
+            - option "HKM (Halaqah Al-Qur'an)"
+            - option "HKM — Presensi (Halaqah Keluarga Tilawa Labs)"
+            - option "Madrasah Nusantara"
+            - option "Ruang Belajar Islam (RBI)"
+            - option "Tahsin Al-Fatihah Mustahik (LAZ)"
+        - navigation [ref=f1e75]:
+          - link "Kehadiran" [ref=f1e76] [cursor=pointer]:
+            - /url: /hits-regular-jan/dashboard
+          - link "Peserta" [ref=f1e77] [cursor=pointer]:
+            - /url: /hits-regular-jan/peserta
+          - link "Pengajar" [ref=f1e78] [cursor=pointer]:
+            - /url: /hits-regular-jan/pengajar
+          - link "Silabus" [ref=f1e79] [cursor=pointer]:
+            - /url: /hits-regular-jan/silabus
+          - link "Action Items" [ref=f1e80] [cursor=pointer]:
+            - /url: /hits-regular-jan/inbox
+          - link "Laporan" [ref=f1e81] [cursor=pointer]:
+            - /url: /hits-regular-jan/report
+          - link "Perubahan" [ref=f1e82] [cursor=pointer]:
+            - /url: /hits-regular-jan/perubahan
+        - generic [ref=f1e83]:
+          - button "Sync" [ref=f1e84]
+          - button "Keluar" [ref=f1e90]
+      - main [ref=f1e92]:
+        - generic [ref=f1e93]:
+          - heading "Laporan Bulanan" [level=1] [ref=f1e94]
+          - paragraph [ref=f1e95]: Laporan peserta & rekap presensi mengajar pengajar, keduanya per bulan kalender (rentang tanggal bisa diubah). Bisa diunduh sebagai xlsx.
+        - generic [ref=f1e96]:
+          - tablist [ref=f1e97]:
+            - tab "Laporan Peserta" [ref=f1e98]
+            - tab "Rekap Pengajar" [active] [selected] [ref=f1e99]
+          - tabpanel "Rekap Pengajar" [ref=f1e125]:
+            - generic [ref=f1e126]:
+              - generic [ref=f1e127]
+              - button "Tampilkan" [ref=f1e132]
+              - link "Export xlsx" [ref=f1e133] [cursor=pointer]:
+                - /url: /api/reports/hits-regular-jan/teacher?start=2026-08-01&end=2026-08-31
+              - generic [ref=f1e134]: real = guru mengajar · ideal = pertemuan periode · lintas semua program
+  - button "Open Next.js Dev Tools" [ref=f1e120] [cursor=pointer]
+  - alert [ref=f1e124]

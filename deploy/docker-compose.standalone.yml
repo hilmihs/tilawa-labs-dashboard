@@ -1,0 +1,97 @@
+# Standalone single-VPS deploy — app is the ONLY thing on this box.
+# Self-contained: bundles its own Caddy (auto-HTTPS on 80/443). No external
+# reverse-proxy network required (unlike deploy/docker-compose.yml, which
+# attaches to a pre-existing `n8n_default` ingress network).
+#
+# Use this on a fresh VPS that has nothing else fronting 80/443.
+#   1. cp deploy/.env.example deploy/.env   && fill it in
+#   2. edit deploy/Caddyfile.standalone     → your domain
+#   3. docker compose -f deploy/docker-compose.standalone.yml up -d
+# Migrations + seed run automatically (migrate service) before app starts.
+name: m-edu
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: mabni
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: mabni
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mabni -d mabni"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  # One-shot: apply migrations + seed programs, then exit.
+  migrate:
+    image: ghcr.io/tilawa-project-dev/dashboard-administrasi-edu:build-main
+    build:
+      context: ..
+      target: build
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+    command: sh -c "pnpm db:migrate && pnpm seed:programs"
+    restart: "no"
+
+  app:
+    image: ghcr.io/tilawa-project-dev/dashboard-administrasi-edu:runner-main
+    build:
+      context: ..
+      target: runner
+    env_file: .env
+    # VPS has no IPv6 route but upstreams publish AAAA → Node tries IPv6 first
+    # and every outbound fetch hangs UND_ERR_CONNECT_TIMEOUT. Force IPv4-first.
+    environment:
+      NODE_OPTIONS: --dns-result-order=ipv4first
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    volumes:
+      - storage:/app/storage # generated surat-peringatan PDFs (STORAGE_BACKEND=local)
+    restart: unless-stopped
+
+  # Bundled ingress + auto-HTTPS. Fetches a Let's Encrypt cert for the domain
+  # in Caddyfile.standalone (needs 80/443 open + DNS A record → this VPS).
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - app
+    volumes:
+      - ./Caddyfile.standalone:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+  # Near-live tilawah sync every 15 min (guarded against overlap).
+  # NOTE: syncs ONLY tilawah. HKM (berkah_api), Mabni (mabni_api) and Maahir
+  # (maahir_api) are not covered here — add loops hitting /api/cron/sync-hkm,
+  # /api/cron/sync-mabni and /api/cron/sync-maahir, or trigger them manually
+  # from /admin/users. See deploy/docker-compose.yml for the multi-route loop
+  # this file deliberately does not copy. `sync-maahir` is safe to add to a
+  # 15-min loop: it no-ops unless its last successful run is >6 h old.
+  cron:
+    image: curlimages/curl:latest
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      - app
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - 'while true; do curl -fsS -H "Authorization: Bearer $$CRON_SECRET" http://app:3000/api/cron/sync-tilawah >/dev/null 2>&1 || true; sleep 900; done'
+
+volumes:
+  dbdata: {}
+  storage: {}
+  caddy_data: {}
+  caddy_config: {}

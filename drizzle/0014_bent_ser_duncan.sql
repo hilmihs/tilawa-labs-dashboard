@@ -1,0 +1,2 @@
+ALTER TABLE "students_sync" ADD COLUMN "enrollment_created_at" timestamp with time zone;--> statement-breakpoint
+ALTER TABLE "students_sync" ADD COLUMN "enrollment_updated_at" timestamp with time zone;

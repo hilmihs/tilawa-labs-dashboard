@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#f6f7f9;font-family:'Geist',ui-sans-serif,system-ui,sans-serif;color:#171717;-webkit-font-smoothing:antialiased}
+  .tnum{font-variant-numeric:tabular-nums}
+  .mono{font-family:'Geist Mono',ui-monospace,monospace}
+  a{color:#2563eb;text-decoration:none}
+  a:hover{text-decoration:underline}
+</style>
+</helmet>
+<div style="display:flex;min-height:100vh;width:1440px">
+
+  <!-- icon rail -->
+  <nav style="width:76px;flex:none;background:#ffffff;border-right:1px solid #ececef;display:flex;flex-direction:column;align-items:center;padding:16px 0;gap:6px;position:relative">
+    <div style="width:40px;height:40px;border-radius:11px;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:17px;margin-bottom:14px;box-shadow:0 4px 10px rgba(37,99,235,.28)">م</div>
+
+    <div style="position:relative;width:100%;display:flex;justify-content:center">
+      <div style="position:absolute;left:0;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:#2563eb"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px;color:#2563eb;background:#eff4ff;border-radius:12px;padding:9px 0;width:52px">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18M8.5 15l2 2 3.5-3.5"/></svg>
+        <span style="font-size:9.5px;font-weight:600">Hadir</span>
+      </div>
+    </div>
+
+    <a href="#" style="display:flex;flex-direction:column;align-items:center;gap:2px;color:#8a8f98;padding:9px 0;width:52px;border-radius:12px"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span style="font-size:9.5px;font-weight:500;color:#8a8f98">Peserta</span></a>
+
+    <a href="#" style="display:flex;flex-direction:column;align-items:center;gap:2px;color:#8a8f98;padding:9px 0;width:52px;border-radius:12px"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span style="font-size:9.5px;font-weight:500;color:#8a8f98">Pengajar</span></a>
+
+    <a href="#" style="display:flex;flex-direction:column;align-items:center;gap:2px;color:#8a8f98;padding:9px 0;width:52px;border-radius:12px"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span style="font-size:9.5px;font-weight:500;color:#8a8f98">Silabus</span></a>
+
+    <a href="#" style="display:flex;flex-direction:column;align-items:center;gap:2px;color:#8a8f98;padding:9px 0;width:52px;border-radius:12px;position:relative"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg><span style="font-size:9.5px;font-weight:500;color:#8a8f98">Aksi</span><span style="position:absolute;top:6px;right:8px;min-width:15px;height:15px;padding:0 3px;border-radius:8px;background:#dc2626;color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center">7</span></a>
+
+    <a href="#" style="display:flex;flex-direction:column;align-items:center;gap:2px;color:#8a8f98;padding:9px 0;width:52px;border-radius:12px"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6"/><rect x="12" y="7" width="3" height="10"/><rect x="17" y="13" width="3" height="4"/></svg><span style="font-size:9.5px;font-weight:500;color:#8a8f98">Laporan</span></a>
+
+    <a href="#" style="display:flex;flex-direction:column;align-items:center;gap:2px;color:#8a8f98;padding:9px 0;width:52px;border-radius:12px"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg><span style="font-size:9.5px;font-weight:500;color:#8a8f98">Surat</span></a>
+
+    <a href="#" style="display:flex;flex-direction:column;align-items:center;gap:2px;color:#8a8f98;padding:9px 0;width:52px;border-radius:12px"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg><span style="font-size:9.5px;font-weight:500;color:#8a8f98">Skor</span></a>
+
+    <div style="margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:2px;color:#8a8f98;padding-top:12px"><div style="width:34px;height:34px;border-radius:10px;background:#f0f0f2;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#52525b">SA</div></div>
+  </nav>
+
+  <!-- main -->
+  <div style="flex:1;display:flex;flex-direction:column;min-width:0">
+
+    <!-- topbar -->
+    <header style="height:60px;flex:none;background:#fff;border-bottom:1px solid #ececef;display:flex;align-items:center;gap:16px;padding:0 28px">
+      <div style="display:flex;align-items:center;gap:9px;background:#f5f5f7;border:1px solid #e7e7ea;border-radius:9px;padding:6px 11px;cursor:pointer">
+        <span style="width:8px;height:8px;border-radius:50%;background:#2563eb"></span>
+        <span style="font-weight:600;font-size:14px">HITS Reguler</span>
+        <span style="font-size:11px;color:#9a9aa2;background:#ececef;border-radius:5px;padding:1px 6px">Batch 12</span>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9a9aa2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+      </div>
+
+      <nav style="display:flex;align-items:center;gap:2px;margin-left:6px">
+        <span style="font-size:13.5px;font-weight:600;color:#171717;padding:7px 12px;border-radius:8px;background:#f2f4f8">Kehadiran</span>
+        <a href="#" style="font-size:13.5px;color:#71717a;padding:7px 12px;border-radius:8px">Peserta</a>
+        <a href="#" style="font-size:13.5px;color:#71717a;padding:7px 12px;border-radius:8px">Pengajar</a>
+        <a href="#" style="font-size:13.5px;color:#71717a;padding:7px 12px;border-radius:8px">Silabus</a>
+        <a href="#" style="font-size:13.5px;color:#71717a;padding:7px 12px;border-radius:8px">Laporan</a>
+      </nav>
+
+      <div style="margin-left:auto;display:flex;align-items:center;gap:14px">
+        <div style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:#3f9142;background:#effaf1;border:1px solid #cdeed2;border-radius:8px;padding:6px 11px">
+          <span style="width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px #d6f5dd"></span>
+          Tersync 6 mnt lalu
+        </div>
+        <button style="display:flex;align-items:center;gap:7px;font-size:13px;font-weight:500;color:#fff;background:#2563eb;border:none;border-radius:8px;padding:8px 13px;cursor:pointer">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
+          Sync
+        </button>
+        <span style="font-size:13px;color:#71717a">coordinator@tilawalabs.demo</span>
+      </div>
+    </header>
+
+    <!-- scrolling content -->
+    <main style="flex:1;padding:26px 28px 40px;overflow:auto">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:20px">
+        <div>
+          <h1 style="margin:0;font-size:23px;font-weight:700;letter-spacing:-.01em">Monitoring Kehadiran</h1>
+          <p style="margin:5px 0 0;font-size:13.5px;color:#71717a">Data ditarik dari <span class="mono" style="color:#52525b">cms.tilawalabs.demo</span> · keterlambatan dari <a href="#">form piket</a>.</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #ececef;border-radius:9px;padding:5px 6px">
+          <span style="font-size:12px;color:#71717a;padding-left:6px">Periode</span>
+          <span style="font-size:13px;font-weight:600;background:#f2f4f8;border-radius:6px;padding:5px 10px">Agustus 2026</span>
+        </div>
+      </div>
+
+      <!-- KPI row -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr) 1.4fr;gap:14px;margin-bottom:22px">
+        <div style="background:#fff;border:1px solid #ececef;border-radius:14px;padding:16px 17px">
+          <div style="font-size:12px;color:#71717a">Rata² kehadiran</div>
+          <div class="tnum" style="font-size:29px;font-weight:700;margin-top:6px;letter-spacing:-.02em">79.6<span style="font-size:17px;color:#a1a1aa">%</span></div>
+          <div style="display:flex;align-items:center;gap:5px;margin-top:7px;font-size:11.5px;color:#3f9142"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>2.4% vs Juli</div>
+        </div>
+        <div style="background:#fff;border:1px solid #ececef;border-radius:14px;padding:16px 17px">
+          <div style="font-size:12px;color:#71717a">Halaqah aktif</div>
+          <div class="tnum" style="font-size:29px;font-weight:700;margin-top:6px;letter-spacing:-.02em">24</div>
+          <div style="margin-top:7px;font-size:11.5px;color:#a1a1aa">18 Ikhwan · 6 Akhwat</div>
+        </div>
+        <div style="background:#fff;border:1px solid #ececef;border-radius:14px;padding:16px 17px">
+          <div style="font-size:12px;color:#71717a">Peserta</div>
+          <div class="tnum" style="font-size:29px;font-weight:700;margin-top:6px;letter-spacing:-.02em">268</div>
+          <div style="margin-top:7px;font-size:11.5px;color:#a1a1aa">terdaftar batch ini</div>
+        </div>
+        <div style="background:#fff;border:1px solid #ececef;border-radius:14px;padding:16px 17px">
+          <div style="font-size:12px;color:#71717a">Halaqah kritis</div>
+          <div class="tnum" style="font-size:29px;font-weight:700;margin-top:6px;letter-spacing:-.02em;color:#dc2626">3</div>
+          <div style="margin-top:7px;font-size:11.5px;color:#c2760c">2 pengajar &lt; target</div>
+        </div>
+        <!-- mini trend chart -->
+        <div style="background:#fff;border:1px solid #ececef;border-radius:14px;padding:14px 16px;display:flex;flex-direction:column">
+          <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:12px;color:#71717a">Tren kehadiran mingguan</span><span class="tnum" style="font-size:12px;font-weight:600;color:#2563eb">8 pertemuan</span></div>
+          <svg viewBox="0 0 260 66" preserveAspectRatio="none" style="width:100%;height:66px;margin-top:8px">
+            <defs><linearGradient id="gA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2563eb" stop-opacity=".22"/><stop offset="1" stop-color="#2563eb" stop-opacity="0"/></linearGradient></defs>
+            <path d="M0,44 L37,38 L74,41 L111,30 L148,33 L185,22 L222,26 L260,16 L260,66 L0,66 Z" fill="url(#gA)"/>
+            <path d="M0,44 L37,38 L74,41 L111,30 L148,33 L185,22 L222,26 L260,16" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="260" cy="16" r="3.2" fill="#2563eb"/>
+          </svg>
+          <div style="display:flex;justify-content:space-between;font-size:9.5px;color:#b4b4bb" class="mono"><span>P1</span><span>P4</span><span>P8</span></div>
+        </div>
+      </div>
+
+      <!-- segment summary + filters bar -->
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:12px">
+        <h2 style="margin:0;font-size:13px;font-weight:600;color:#52525b">Daftar halaqah <span style="font-weight:400;color:#a1a1aa">· klik untuk rincian per pertemuan</span></h2>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="display:inline-flex;gap:2px;background:#f2f2f4;border:1px solid #e7e7ea;border-radius:9px;padding:3px">
+            <span style="font-size:12.5px;font-weight:600;background:#171717;color:#fff;border-radius:6px;padding:5px 12px">Semua</span>
+            <span style="font-size:12.5px;color:#71717a;padding:5px 12px">Ikhwan</span>
+            <span style="font-size:12.5px;color:#71717a;padding:5px 12px">Akhwat</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #e7e7ea;border-radius:9px;padding:6px 11px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9a9aa2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+            <span style="font-size:12.5px;color:#9a9aa2">Cari halaqah / pengajar…</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- table -->
+      <div style="background:#fff;border:1px solid #ececef;border-radius:14px;overflow:hidden">
+        <table style="width:100%;border-collapse:collapse;font-size:13px">
+          <thead>
+            <tr style="background:#fafafb;color:#8a8f98;text-align:left">
+              <th style="padding:11px 16px;font-weight:500">Halaqah</th>
+              <th style="padding:11px 12px;font-weight:500">Pengajar</th>
+              <th style="padding:11px 12px;font-weight:500">Level</th>
+              <th style="padding:11px 12px;font-weight:500">Jenis</th>
+              <th style="padding:11px 12px;font-weight:500">8 pertemuan terakhir</th>
+              <th style="padding:11px 12px;font-weight:500;text-align:right">Rata² hadir</th>
+              <th style="padding:11px 12px;font-weight:500;text-align:right">Belum presensi</th>
+              <th style="padding:11px 16px;font-weight:500">Kondisi</th>
+            </tr>
+          </thead>
+          <tbody class="tnum">
+            <tr style="border-top:1px solid #f1f1f3">
+              <td style="padding:12px 16px;font-weight:600"><a href="#">Al-Fath 1</a></td>
+              <td style="padding:12px 12px;color:#3f3f46">Ust. Abdullah Hakim</td>
+              <td style="padding:12px 12px;color:#71717a">Marhalah 2</td>
+              <td style="padding:12px 12px"><span style="font-size:11.5px;color:#3f6ad8;background:#eef3ff;border-radius:5px;padding:2px 7px">Ikhwan</span></td>
+              <td style="padding:12px 12px"><span style="display:inline-flex;gap:3px"><i style="width:15px;height:15px;border-radius:4px;background:#22c55e;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#22c55e;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#f59e0b;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#22c55e;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#22c55e;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#22c55e;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#3b82f6;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#22c55e;display:inline-block"></i></span></td>
+              <td style="padding:12px 12px;text-align:right;font-weight:600">94.2%</td>
+              <td style="padding:12px 12px;text-align:right;color:#a1a1aa">0</td>
+              <td style="padding:12px 16px"><span style="font-size:11.5px;color:#3f9142;background:#effaf1;border-radius:20px;padding:3px 10px">aman</span></td>
+            </tr>
+            <tr style="border-top:1px solid #f1f1f3">
+              <td style="padding:12px 16px;font-weight:600"><a href="#">Az-Zahra 3</a></td>
+              <td style="padding:12px 12px;color:#3f3f46">Usth. Nafisah Zahra</td>
+              <td style="padding:12px 12px;color:#71717a">Marhalah 1</td>
+              <td style="padding:12px 12px"><span style="font-size:11.5px;color:#a4519a;background:#fbeefa;border-radius:5px;padding:2px 7px">Akhwat</span></td>
+              <td style="padding:12px 12px"><span style="display:inline-flex;gap:3px"><i style="width:15px;height:15px;border-radius:4px;background:#22c55e;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#22c55e;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#22c55e;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#3b82f6;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#22c55e;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#f59e0b;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#22c55e;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#22c55e;display:inline-block"></i></span></td>
+              <td style="padding:12px 12px;text-align:right;font-weight:600">88.7%</td>
+              <td style="padding:12px 12px;text-align:right;color:#a1a1aa">0</td>
+              <td style="padding:12px 16px"><span style="font-size:11.5px;color:#3f9142;background:#effaf1;border-radius:20px;padding:3px 10px">aman</span></td>
+            </tr>
+            <tr style="border-top:1px solid #f1f1f3">
+              <td style="padding:12px 16px;font-weight:600"><a href="#">Al-Hikmah 2</a></td>
+              <td style="padding:12px 12px;color:#3f3f46">Ust. Fauzan Rahman</td>
+              <td style="padding:12px 12px;color:#71717a">Marhalah 1</td>
+              <td style="padding:12px 12px"><span style="font-size:11.5px;color:#3f6ad8;background:#eef3ff;border-radius:5px;padding:2px 7px">Ikhwan</span></td>
+              <td style="padding:12px 12px"><span style="display:inline-flex;gap:3px"><i style="width:15px;height:15px;border-radius:4px;background:#22c55e;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#f59e0b;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#ef4444;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#22c55e;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#f59e0b;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#22c55e;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#e4e4e7;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#e4e4e7;display:inline-block"></i></span></td>
+              <td style="padding:12px 12px;text-align:right;font-weight:600;color:#c2760c">71.3%</td>
+              <td style="padding:12px 12px;text-align:right;color:#c2760c;font-weight:600">2</td>
+              <td style="padding:12px 16px"><span style="font-size:11.5px;color:#b45309;background:#fef6e7;border-radius:20px;padding:3px 10px">perhatian</span></td>
+            </tr>
+            <tr style="border-top:1px solid #f1f1f3;background:#fffafa">
+              <td style="padding:12px 16px;font-weight:600"><a href="#">An-Nur 4</a></td>
+              <td style="padding:12px 12px;color:#3f3f46">Usth. Khadijah Amin</td>
+              <td style="padding:12px 12px;color:#71717a">Marhalah 3</td>
+              <td style="padding:12px 12px"><span style="font-size:11.5px;color:#a4519a;background:#fbeefa;border-radius:5px;padding:2px 7px">Akhwat</span></td>
+              <td style="padding:12px 12px"><span style="display:inline-flex;gap:3px"><i style="width:15px;height:15px;border-radius:4px;background:#ef4444;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#f59e0b;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#ef4444;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#22c55e;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#ef4444;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#f59e0b;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#e4e4e7;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#e4e4e7;display:inline-block"></i></span></td>
+              <td style="padding:12px 12px;text-align:right;font-weight:700;color:#dc2626">63.5%</td>
+              <td style="padding:12px 12px;text-align:right;color:#c2760c;font-weight:600">3</td>
+              <td style="padding:12px 16px"><span style="font-size:11.5px;color:#b91c1c;background:#fdeeee;border-radius:20px;padding:3px 10px">kritis</span></td>
+            </tr>
+            <tr style="border-top:1px solid #f1f1f3">
+              <td style="padding:12px 16px;font-weight:600"><a href="#">Al-Furqan 1</a></td>
+              <td style="padding:12px 12px;color:#3f3f46">Ust. Ridwan Salim</td>
+              <td style="padding:12px 12px;color:#71717a">Tamhidi</td>
+              <td style="padding:12px 12px"><span style="font-size:11.5px;color:#3f6ad8;background:#eef3ff;border-radius:5px;padding:2px 7px">Ikhwan</span></td>
+              <td style="padding:12px 12px"><span style="display:inline-flex;gap:3px"><i style="width:15px;height:15px;border-radius:4px;background:#22c55e;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#22c55e;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#f59e0b;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#22c55e;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#3b82f6;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#22c55e;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#22c55e;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#f59e0b;display:inline-block"></i></span></td>
+              <td style="padding:12px 12px;text-align:right;font-weight:600">82.0%</td>
+              <td style="padding:12px 12px;text-align:right;color:#a1a1aa">0</td>
+              <td style="padding:12px 16px"><span style="font-size:11.5px;color:#3f9142;background:#effaf1;border-radius:20px;padding:3px 10px">aman</span></td>
+            </tr>
+            <tr style="border-top:1px solid #f1f1f3;background:#fffafa">
+              <td style="padding:12px 16px;font-weight:600"><a href="#">As-Sakinah 2</a></td>
+              <td style="padding:12px 12px;color:#3f3f46">Usth. Maryam Hafizah</td>
+              <td style="padding:12px 12px;color:#71717a">Marhalah 2</td>
+              <td style="padding:12px 12px"><span style="font-size:11.5px;color:#a4519a;background:#fbeefa;border-radius:5px;padding:2px 7px">Akhwat</span></td>
+              <td style="padding:12px 12px"><span style="display:inline-flex;gap:3px"><i style="width:15px;height:15px;border-radius:4px;background:#ef4444;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#ef4444;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#f59e0b;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#ef4444;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#22c55e;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#ef4444;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#e4e4e7;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#e4e4e7;display:inline-block"></i></span></td>
+              <td style="padding:12px 12px;text-align:right;font-weight:700;color:#dc2626">58.9%</td>
+              <td style="padding:12px 12px;text-align:right;color:#c2760c;font-weight:600">4</td>
+              <td style="padding:12px 16px"><span style="font-size:11.5px;color:#b91c1c;background:#fdeeee;border-radius:20px;padding:3px 10px">kritis</span></td>
+            </tr>
+            <tr style="border-top:1px solid #f1f1f3">
+              <td style="padding:12px 16px;font-weight:600"><a href="#">Al-Bayan 3</a></td>
+              <td style="padding:12px 12px;color:#3f3f46">Ust. Ibrahim Yusuf</td>
+              <td style="padding:12px 12px;color:#71717a">Marhalah 3</td>
+              <td style="padding:12px 12px"><span style="font-size:11.5px;color:#3f6ad8;background:#eef3ff;border-radius:5px;padding:2px 7px">Ikhwan</span></td>
+              <td style="padding:12px 12px"><span style="display:inline-flex;gap:3px"><i style="width:15px;height:15px;border-radius:4px;background:#22c55e;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#22c55e;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#22c55e;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#22c55e;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#f59e0b;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#22c55e;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#22c55e;display:inline-block"></i><i style="width:15px;height:15px;border-radius:4px;background:#22c55e;display:inline-block"></i></span></td>
+              <td style="padding:12px 12px;text-align:right;font-weight:600">90.5%</td>
+              <td style="padding:12px 12px;text-align:right;color:#a1a1aa">0</td>
+              <td style="padding:12px 16px"><span style="font-size:11.5px;color:#3f9142;background:#effaf1;border-radius:20px;padding:3px 10px">aman</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-top:1px solid #f1f1f3;font-size:12px;color:#8a8f98">
+          <span>Menampilkan 7 dari 24 halaqah</span>
+          <div style="display:flex;align-items:center;gap:14px">
+            <span style="display:inline-flex;align-items:center;gap:5px"><i style="width:11px;height:11px;border-radius:3px;background:#22c55e;display:inline-block"></i>Hadir <i style="width:11px;height:11px;border-radius:3px;background:#f59e0b;display:inline-block;margin-left:8px"></i>Telat <i style="width:11px;height:11px;border-radius:3px;background:#3b82f6;display:inline-block;margin-left:8px"></i>Izin <i style="width:11px;height:11px;border-radius:3px;background:#ef4444;display:inline-block;margin-left:8px"></i>Alfa</span>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

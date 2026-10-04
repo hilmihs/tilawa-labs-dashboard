@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#0b1018;font-family:'Geist',ui-sans-serif,system-ui,sans-serif;color:#e5eaf2;-webkit-font-smoothing:antialiased}
+  .tnum{font-variant-numeric:tabular-nums}.mono{font-family:'Geist Mono',ui-monospace,monospace}.cap{text-transform:uppercase;letter-spacing:.12em}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+</style>
+</helmet>
+<div style="width:1920px;height:1080px;background:radial-gradient(1200px 700px at 80% -10%,#16203180,#0b1018);display:flex;flex-direction:column;padding:48px 56px;overflow:hidden">
+
+  <!-- header -->
+  <header style="display:flex;align-items:center;gap:24px;flex:none">
+    <div style="width:64px;height:64px;border-radius:18px;background:linear-gradient(160deg,#3b82f6,#2563eb);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:28px">م</div>
+    <div>
+      <div style="font-size:30px;font-weight:700;letter-spacing:-.01em">HITS Reguler — Papan Kehadiran</div>
+      <div class="mono cap" style="font-size:15px;color:#7c8798;margin-top:4px">Batch 12 · Pekan 8 · cms.tilawalabs.demo</div>
+    </div>
+    <div style="margin-left:auto;text-align:right">
+      <div class="tnum" style="font-size:44px;font-weight:700;letter-spacing:-.01em">19:42</div>
+      <div class="mono cap" style="font-size:14px;color:#7c8798;margin-top:2px">Kamis · 14 Agustus 2026</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;background:#111a28;border:1px solid #22304a;border-radius:12px;padding:12px 18px;margin-left:8px">
+      <span style="width:12px;height:12px;border-radius:50%;background:#22c55e;animation:pulse 2s ease-in-out infinite"></span>
+      <span class="mono cap" style="font-size:14px;color:#8fb0e6">LIVE · sync 3 mnt</span>
+    </div>
+  </header>
+
+  <!-- KPI band -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:40px;flex:none">
+    <div style="background:#111a28;border:1px solid #1e2b40;border-radius:20px;padding:28px 32px">
+      <div class="cap" style="font-size:16px;color:#7c8798;font-weight:600">Hadir malam ini</div>
+      <div class="tnum" style="font-size:68px;font-weight:800;line-height:1;margin-top:12px;color:#4ade80">214<span style="font-size:32px;color:#3f6b52;font-weight:600">/268</span></div>
+      <div class="mono" style="font-size:15px;color:#7c8798;margin-top:10px">79.9% kehadiran</div>
+    </div>
+    <div style="background:#111a28;border:1px solid #1e2b40;border-radius:20px;padding:28px 32px">
+      <div class="cap" style="font-size:16px;color:#7c8798;font-weight:600">Halaqah berjalan</div>
+      <div class="tnum" style="font-size:68px;font-weight:800;line-height:1;margin-top:12px">22<span style="font-size:32px;color:#41506b;font-weight:600">/24</span></div>
+      <div class="mono" style="font-size:15px;color:#7c8798;margin-top:10px">2 belum mulai</div>
+    </div>
+    <div style="background:#111a28;border:1px solid #1e2b40;border-radius:20px;padding:28px 32px">
+      <div class="cap" style="font-size:16px;color:#7c8798;font-weight:600">Terlambat</div>
+      <div class="tnum" style="font-size:68px;font-weight:800;line-height:1;margin-top:12px;color:#fbbf24">17</div>
+      <div class="mono" style="font-size:15px;color:#7c8798;margin-top:10px">tercatat via piket</div>
+    </div>
+    <div style="background:#111a28;border:1px solid #1e2b40;border-radius:20px;padding:28px 32px">
+      <div class="cap" style="font-size:16px;color:#7c8798;font-weight:600">Perlu perhatian</div>
+      <div class="tnum" style="font-size:68px;font-weight:800;line-height:1;margin-top:12px;color:#f87171">3</div>
+      <div class="mono" style="font-size:15px;color:#7c8798;margin-top:10px">halaqah &lt; 70%</div>
+    </div>
+  </div>
+
+  <!-- halaqah status wall -->
+  <div style="flex:1;margin-top:40px;min-height:0;display:flex;flex-direction:column">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+      <span class="cap" style="font-size:17px;color:#7c8798;font-weight:600">Status halaqah — pertemuan malam ini</span>
+      <div style="display:flex;gap:22px" class="mono cap"><span style="font-size:13px;color:#4ade80">● Selesai presensi</span><span style="font-size:13px;color:#60a5fa">● Sedang berjalan</span><span style="font-size:13px;color:#fbbf24">● Belum input</span></div>
+    </div>
+    <div style="flex:1;display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:1fr;gap:18px">
+
+      <div style="background:#111a28;border:1px solid #1e2b40;border-left:5px solid #22c55e;border-radius:16px;padding:20px 22px;display:flex;flex-direction:column;justify-content:space-between">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between"><div><div style="font-size:22px;font-weight:700">Al-Fath 1</div><div class="mono" style="font-size:13px;color:#7c8798;margin-top:3px">Ust. A. Hakim · M2</div></div><span class="mono cap" style="font-size:11px;color:#0b1018;background:#4ade80;border-radius:6px;padding:3px 9px">Selesai</span></div>
+        <div style="display:flex;align-items:flex-end;justify-content:space-between"><span class="tnum" style="font-size:38px;font-weight:800;color:#4ade80">12<span style="font-size:19px;color:#3f6b52">/12</span></span><span class="mono" style="font-size:13px;color:#7c8798">100%</span></div>
+      </div>
+
+      <div style="background:#111a28;border:1px solid #1e2b40;border-left:5px solid #22c55e;border-radius:16px;padding:20px 22px;display:flex;flex-direction:column;justify-content:space-between">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between"><div><div style="font-size:22px;font-weight:700">Al-Bayan 3</div><div class="mono" style="font-size:13px;color:#7c8798;margin-top:3px">Ust. I. Yusuf · M3</div></div><span class="mono cap" style="font-size:11px;color:#0b1018;background:#4ade80;border-radius:6px;padding:3px 9px">Selesai</span></div>
+        <div style="display:flex;align-items:flex-end;justify-content:space-between"><span class="tnum" style="font-size:38px;font-weight:800;color:#4ade80">11<span style="font-size:19px;color:#3f6b52">/12</span></span><span class="mono" style="font-size:13px;color:#7c8798">92%</span></div>
+      </div>
+
+      <div style="background:#111a28;border:1px solid #22304a;border-left:5px solid #60a5fa;border-radius:16px;padding:20px 22px;display:flex;flex-direction:column;justify-content:space-between">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between"><div><div style="font-size:22px;font-weight:700">Az-Zahra 3</div><div class="mono" style="font-size:13px;color:#7c8798;margin-top:3px">Usth. N. Zahra · M1</div></div><span class="mono cap" style="font-size:11px;color:#0b1018;background:#60a5fa;border-radius:6px;padding:3px 9px">Berjalan</span></div>
+        <div style="display:flex;align-items:flex-end;justify-content:space-between"><span class="tnum" style="font-size:38px;font-weight:800;color:#60a5fa">13<span style="font-size:19px;color:#3a5580">/14</span></span><span class="mono" style="font-size:13px;color:#7c8798">berlangsung</span></div>
+      </div>
+
+      <div style="background:#111a28;border:1px solid #1e2b40;border-left:5px solid #22c55e;border-radius:16px;padding:20px 22px;display:flex;flex-direction:column;justify-content:space-between">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between"><div><div style="font-size:22px;font-weight:700">Al-Furqan 1</div><div class="mono" style="font-size:13px;color:#7c8798;margin-top:3px">Ust. R. Salim · TMH</div></div><span class="mono cap" style="font-size:11px;color:#0b1018;background:#4ade80;border-radius:6px;padding:3px 9px">Selesai</span></div>
+        <div style="display:flex;align-items:flex-end;justify-content:space-between"><span class="tnum" style="font-size:38px;font-weight:800;color:#4ade80">11<span style="font-size:19px;color:#3f6b52">/13</span></span><span class="mono" style="font-size:13px;color:#7c8798">85%</span></div>
+      </div>
+
+      <div style="background:#111a28;border:1px solid #22304a;border-left:5px solid #60a5fa;border-radius:16px;padding:20px 22px;display:flex;flex-direction:column;justify-content:space-between">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between"><div><div style="font-size:22px;font-weight:700">Ar-Rahman 2</div><div class="mono" style="font-size:13px;color:#7c8798;margin-top:3px">Ust. Z. Abdillah · M2</div></div><span class="mono cap" style="font-size:11px;color:#0b1018;background:#60a5fa;border-radius:6px;padding:3px 9px">Berjalan</span></div>
+        <div style="display:flex;align-items:flex-end;justify-content:space-between"><span class="tnum" style="font-size:38px;font-weight:800;color:#60a5fa">10<span style="font-size:19px;color:#3a5580">/12</span></span><span class="mono" style="font-size:13px;color:#7c8798">berlangsung</span></div>
+      </div>
+
+      <div style="background:#111a28;border:1px solid #3a2a1a;border-left:5px solid #fbbf24;border-radius:16px;padding:20px 22px;display:flex;flex-direction:column;justify-content:space-between">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between"><div><div style="font-size:22px;font-weight:700">Al-Hikmah 2</div><div class="mono" style="font-size:13px;color:#7c8798;margin-top:3px">Ust. F. Rahman · M1</div></div><span class="mono cap" style="font-size:11px;color:#0b1018;background:#fbbf24;border-radius:6px;padding:3px 9px">Belum</span></div>
+        <div style="display:flex;align-items:flex-end;justify-content:space-between"><span class="tnum" style="font-size:38px;font-weight:800;color:#fbbf24">—</span><span class="mono" style="font-size:13px;color:#fbbf24">belum input</span></div>
+      </div>
+
+      <div style="background:#111a28;border:1px solid #1e2b40;border-left:5px solid #22c55e;border-radius:16px;padding:20px 22px;display:flex;flex-direction:column;justify-content:space-between">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between"><div><div style="font-size:22px;font-weight:700">An-Nur 4</div><div class="mono" style="font-size:13px;color:#7c8798;margin-top:3px">Usth. K. Amin · M3</div></div><span class="mono cap" style="font-size:11px;color:#0b1018;background:#4ade80;border-radius:6px;padding:3px 9px">Selesai</span></div>
+        <div style="display:flex;align-items:flex-end;justify-content:space-between"><span class="tnum" style="font-size:38px;font-weight:800;color:#f87171">8<span style="font-size:19px;color:#6b3f3f">/13</span></span><span class="mono" style="font-size:13px;color:#f87171">62% · kritis</span></div>
+      </div>
+
+      <div style="background:#111a28;border:1px solid #3a2a1a;border-left:5px solid #fbbf24;border-radius:16px;padding:20px 22px;display:flex;flex-direction:column;justify-content:space-between">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between"><div><div style="font-size:22px;font-weight:700">As-Sakinah 2</div><div class="mono" style="font-size:13px;color:#7c8798;margin-top:3px">Usth. M. Hafizah · M2</div></div><span class="mono cap" style="font-size:11px;color:#0b1018;background:#fbbf24;border-radius:6px;padding:3px 9px">Belum</span></div>
+        <div style="display:flex;align-items:flex-end;justify-content:space-between"><span class="tnum" style="font-size:38px;font-weight:800;color:#fbbf24">—</span><span class="mono" style="font-size:13px;color:#fbbf24">belum input</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ticker -->
+  <div style="flex:none;margin-top:32px;background:#111a28;border:1px solid #1e2b40;border-radius:14px;height:56px;display:flex;align-items:center;overflow:hidden;position:relative">
+    <div style="flex:none;height:100%;display:flex;align-items:center;gap:10px;padding:0 22px;background:#2563eb;color:#fff"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-5v12L3 14v-3zM11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg><span class="mono cap" style="font-size:14px;font-weight:600">Info</span></div>
+    <div style="flex:1;overflow:hidden;white-space:nowrap"><div style="display:inline-block;animation:ticker 40s linear infinite" class="mono"><span style="font-size:16px;color:#aeb9cc;padding:0 40px">Evaluasi tahsin tengah marhalah 1 dijadwalkan pekan depan.</span><span style="font-size:16px;color:#7c8798">•</span><span style="font-size:16px;color:#aeb9cc;padding:0 40px">2 halaqah belum menginput presensi — batas 20:00.</span><span style="font-size:16px;color:#7c8798">•</span><span style="font-size:16px;color:#aeb9cc;padding:0 40px">Rata² kehadiran naik 2.4 poin dari bulan lalu.</span><span style="font-size:16px;color:#7c8798">•</span><span style="font-size:16px;color:#aeb9cc;padding:0 40px">Evaluasi tahsin tengah marhalah 1 dijadwalkan pekan depan.</span><span style="font-size:16px;color:#7c8798">•</span><span style="font-size:16px;color:#aeb9cc;padding:0 40px">2 halaqah belum menginput presensi — batas 20:00.</span><span style="font-size:16px;color:#7c8798">•</span><span style="font-size:16px;color:#aeb9cc;padding:0 40px">Rata² kehadiran naik 2.4 poin dari bulan lalu.</span><span style="font-size:16px;color:#7c8798">•</span></div></div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1920,&quot;height&quot;:1080}}"></script>
+</body>
+</html>
