@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import Image from "next/image";
 import { LoginForm } from "./LoginForm";
+import { AkunDemo } from "./AkunDemo";
 // Static imports, not "/brand/*.png" strings: the auth middleware matches every
 // path except /_next/static, so a logged-out visitor asking for /brand/… is
 // redirected to /login and the logo breaks. Imported images are emitted under
@@ -55,6 +56,7 @@ export default function LoginPage() {
           <Suspense>
             <LoginForm />
           </Suspense>
+          <AkunDemo />
         </div>
       </main>
     </div>
